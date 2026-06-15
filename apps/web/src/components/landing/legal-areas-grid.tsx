@@ -23,7 +23,7 @@ export function LegalAreasGrid() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {LEGAL_AREAS.map((area, i) => (
-            <GlassCard key={area.id} hover delay={i * 0.05} className="group relative">
+            <GlassCard key={area.id} hover delay={i * 0.05} className="group relative" data-scroll="area-card">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-display text-lg font-semibold">{area.label}</h3>

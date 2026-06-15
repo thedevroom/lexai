@@ -1,3 +1,4 @@
+import { LandingScrollAnimations } from '@/components/landing/landing-scroll-animations';
 import { ProductDemo } from '@/components/landing/product-demo';
 import { Comparison } from '@/components/landing/comparison';
 import { FAQ } from '@/components/landing/faq';
@@ -12,15 +13,17 @@ export default function LandingPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content">
-        <Hero />
-        <Problems />
-        <LegalAreasGrid />
-        <ProductDemo />
-        <Comparison />
-        <Pricing />
-        <FAQ />
-      </main>
+      <LandingScrollAnimations>
+        <main id="main-content">
+          <Hero />
+          <Problems />
+          <LegalAreasGrid />
+          <ProductDemo />
+          <Comparison />
+          <Pricing />
+          <FAQ />
+        </main>
+      </LandingScrollAnimations>
       <Footer />
     </>
   );

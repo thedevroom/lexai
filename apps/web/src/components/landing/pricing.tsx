@@ -45,7 +45,7 @@ export function Pricing() {
   const [annual, setAnnual] = useState(false);
 
   return (
-    <section id="pricing" className="px-6 py-24">
+    <section id="pricing" className="px-6 py-24" data-scroll="reveal">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <h2 className="font-display text-4xl font-bold">Precios transparentes</h2>

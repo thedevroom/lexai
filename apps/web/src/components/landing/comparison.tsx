@@ -12,7 +12,7 @@ const rows = [
 
 export function Comparison() {
   return (
-    <section className="px-6 py-24">
+    <section className="px-6 py-24" data-scroll="reveal">
       <div className="mx-auto max-w-4xl">
         <h2 className="mb-12 text-center font-display text-3xl font-bold">
           LexAI vs abogado tradicional

@@ -35,7 +35,7 @@ export function Problems() {
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {problems.map((p, i) => (
-            <GlassCard key={p.title} delay={i * 0.08}>
+            <GlassCard key={p.title} delay={i * 0.08} data-scroll="problem-card">
               <p.icon className="mb-4 text-lex-accent-gold" size={24} aria-hidden />
               <h3 className="font-semibold">{p.title}</h3>
               <p className="mt-2 text-sm text-lex-text-secondary">{p.desc}</p>
