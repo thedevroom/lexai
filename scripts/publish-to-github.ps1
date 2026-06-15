@@ -1,4 +1,4 @@
-# Publish LexAI to GitHub (buildwithme1/lexai).
+# Publish LexAI to GitHub (cristianq2020/lexai).
 # Prerequisites: GitHub CLI authenticated — run: gh auth login
 # Usage: pwsh scripts/publish-to-github.ps1
 
@@ -18,7 +18,7 @@ if ($LASTEXITCODE -ne 0) {
   throw "Not authenticated. Run: gh auth login --hostname github.com --git-protocol https --web"
 }
 
-$owner = "buildwithme1"
+$owner = "cristianq2020"
 $repo = "lexai"
 $remote = "https://github.com/$owner/$repo.git"
 

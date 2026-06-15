@@ -143,4 +143,4 @@ Código propietario — ver [LICENSE](./LICENSE).
 
 ---
 
-Desarrollado por [Build With Me](https://github.com/buildwithme1).
+Repositorio: [github.com/cristianq2020/lexai](https://github.com/cristianq2020/lexai)
