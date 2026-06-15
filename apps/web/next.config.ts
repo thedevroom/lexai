@@ -3,9 +3,11 @@ import type { NextConfig } from 'next';
 
 const apiUrl = process.env['API_URL'] ?? 'http://localhost:4000';
 
+const isVercel = Boolean(process.env['VERCEL']);
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  ...(isVercel ? {} : { output: 'standalone' as const }),
   outputFileTracingRoot: path.join(import.meta.dirname, '../..'),
   transpilePackages: ['@lexai/shared', '@lexai/design-tokens'],
   experimental: {

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentación
+    url: https://github.com/thedevroom/lexai/tree/main/docs
+    about: Arquitectura, despliegue y desarrollo
+  - name: Discusiones
+    url: https://github.com/thedevroom/lexai/discussions
+    about: Preguntas e ideas de la comunidad

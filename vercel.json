@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm db:generate && pnpm --filter @lexai/web build",
+  "outputDirectory": "apps/web/.next",
+  "framework": "nextjs",
+  "regions": ["iad1"]
+}
