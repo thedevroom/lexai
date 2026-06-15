@@ -11,7 +11,7 @@ if (Test-Path .git) {
 
 git init -b main
 git config user.email "buildwithme1@proton.me"
-git config user.name "Build With Me"
+git config user.name "thedevroom"
 
 function Commit-Stage {
   param([string]$Message, [string[]]$Paths)
