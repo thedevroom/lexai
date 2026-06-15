@@ -104,13 +104,14 @@ Los despachos y departamentos legales necesitan IA que **entienda el derecho esp
 ## Arquitectura
 
 ```mermaid
+
 flowchart TB
   subgraph Cliente
     WEB[Next.js 15 · Marketing + Dashboard]
   end
   subgraph Backend
     API[Fastify + tRPC + Prisma]
-    AI[@lexai/ai Orquestador]
+    AI[lexai/ai Orquestador]
   end
   subgraph Datos
     PG[(PostgreSQL 16)]
