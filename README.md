@@ -143,4 +143,4 @@ Código propietario — ver [LICENSE](./LICENSE).
 
 ---
 
-Repositorio: [github.com/cristianq2020/lexai](https://github.com/cristianq2020/lexai)
+Repositorio: [github.com/thedevroom/lexai](https://github.com/thedevroom/lexai)

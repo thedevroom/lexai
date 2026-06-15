@@ -11,7 +11,7 @@ Gracias por tu interés en el proyecto. Esta guía resume el flujo de trabajo pa
 ## Configuración
 
 ```bash
-git clone https://github.com/cristianq2020/lexai.git
+git clone https://github.com/thedevroom/lexai.git
 cd lexai
 pnpm install
 copy .env.example .env
