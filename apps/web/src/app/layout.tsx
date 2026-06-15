@@ -1,6 +1,8 @@
-import type { Metadata } from 'next';
-import { Inter, Inter_Tight, Playfair_Display } from 'next/font/google';
+import { JsonLd } from '@/components/seo/json-ld';
+import { rootMetadata } from '@/lib/site-metadata';
 import { AppProviders } from '@/providers/app-providers';
+import { Inter, Inter_Tight, Playfair_Display } from 'next/font/google';
+import type { Metadata } from 'next';
 import './globals.css';
 
 const inter = Inter({
@@ -21,21 +23,7 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: 'LexAI — Despacho Jurídico de Inteligencia Artificial',
-    template: '%s | LexAI',
-  },
-  description:
-    'El primer despacho digital premium donde la IA actúa como abogado especialista. Análisis, redacción y asesoramiento jurídico 24/7.',
-  metadataBase: new URL(process.env['WEB_URL'] ?? 'http://localhost:3000'),
-  openGraph: {
-    title: 'LexAI — Despacho Jurídico IA',
-    description: 'Asesoramiento jurídico premium con IA. 9 especialistas, 24/7.',
-    type: 'website',
-    locale: 'es_ES',
-  },
-};
+export const metadata: Metadata = rootMetadata;
 
 export default function RootLayout({
   children,
@@ -47,6 +35,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${interTight.variable} ${playfair.variable} min-h-screen`}
       >
+        <JsonLd />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-lex-accent-gold focus:px-4 focus:py-2 focus:text-lex-bg-primary"
