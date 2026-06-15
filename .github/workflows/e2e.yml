@@ -1,0 +1,130 @@
+# LexAI v2 — End-to-End Tests (Playwright)
+# Nightly smoke + full regression against staging-like environment
+
+name: E2E
+
+on:
+  schedule:
+    # Every night at 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Target base URL for E2E run"
+        required: false
+        default: "http://localhost:3000"
+      grep:
+        description: "Playwright --grep filter (optional)"
+        required: false
+        default: ""
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "10"
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: lexai_e2e
+          POSTGRES_USER: lexai
+          POSTGRES_PASSWORD: lexai_e2e_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U lexai -d lexai_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://lexai:lexai_e2e_password@localhost:5432/lexai_e2e
+      REDIS_URL: redis://localhost:6379
+      NODE_ENV: test
+      WEB_URL: ${{ github.event.inputs.base_url || 'http://localhost:3000' }}
+      API_URL: http://localhost:4000
+      NEXTAUTH_SECRET: e2e-placeholder-secret-minimum-32-characters
+      NEXTAUTH_URL: ${{ github.event.inputs.base_url || 'http://localhost:3000' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/web
+
+      - name: Build applications
+        run: pnpm build
+
+      - name: Seed E2E database
+        run: pnpm db:seed:e2e
+        continue-on-error: true
+
+      - name: Start API server
+        run: pnpm --filter @lexai/api start &
+        continue-on-error: true
+
+      - name: Start web server
+        run: pnpm --filter @lexai/web start &
+        continue-on-error: true
+
+      - name: Wait for services
+        run: |
+          npx wait-on http://localhost:4000/health http://localhost:3000 --timeout 120000
+        continue-on-error: true
+
+      - name: Run Playwright tests
+        run: |
+          GREP="${{ github.event.inputs.grep }}"
+          if [ -n "$GREP" ]; then
+            pnpm --filter @lexai/web exec playwright test --grep "$GREP"
+          else
+            pnpm --filter @lexai/web exec playwright test
+          fi
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: apps/web/playwright-report/
+          retention-days: 14
+
+      - name: Upload test traces
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces-${{ github.run_id }}
+          path: apps/web/test-results/
+          retention-days: 7
