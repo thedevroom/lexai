@@ -1,0 +1,556 @@
+// LexAI v2 — Legal Tech SaaS
+// PostgreSQL schema for expedientes, consultas, documentos y voz
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum LegalArea {
+  LABORAL
+  CIVIL
+  PENAL
+  FAMILIA
+  FISCAL
+  TRAFICO
+  CONSUMIDOR
+  MERCANTIL
+  EXTRANJERIA
+}
+
+enum UserPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE
+  PAUSED
+}
+
+enum CaseStatus {
+  DRAFT
+  ACTIVE
+  ON_HOLD
+  CLOSED
+  ARCHIVED
+}
+
+enum CasePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ConsultationStatus {
+  PENDING
+  IN_PROGRESS
+  AWAITING_USER
+  COMPLETED
+  CANCELLED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum DocumentSemaphore {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum LegalDocumentType {
+  BUROFAX
+  CARTA_DESPIDO
+  DENUNCIA
+  RECURSO_MULTA
+  CONTRATO_ARRENDAMIENTO
+  DEMANDA_CIVIL
+  RECURSO_CONTENCIOSO
+  ESCRITO_ALEGACIONES
+  SOLICITUD_CONCILIACION
+  RECURSO_DE_ALZADA
+  CONTRATO_COMPRAVENTA
+  PODER_NOTARIAL
+  RECLAMACION_CONSUMO
+  SOLICITUD_NACIONALIDAD
+  RECURSO_SANCION
+}
+
+enum DeadlineUrgency {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum DeadlineStatus {
+  PENDING
+  COMPLETED
+  MISSED
+  EXTENDED
+  CANCELLED
+}
+
+enum TimelineEventType {
+  CASE_CREATED
+  CASE_UPDATED
+  CONSULTATION_STARTED
+  CONSULTATION_COMPLETED
+  DOCUMENT_UPLOADED
+  DOCUMENT_ANALYZED
+  LEGAL_DOCUMENT_GENERATED
+  DEADLINE_CREATED
+  DEADLINE_COMPLETED
+  VOICE_SESSION_STARTED
+  VOICE_SESSION_ENDED
+  STATUS_CHANGED
+  NOTE_ADDED
+  PAYMENT_RECEIVED
+  SUBSCRIPTION_CHANGED
+}
+
+enum VoiceSessionStatus {
+  SCHEDULED
+  CONNECTING
+  ACTIVE
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ConsentType {
+  TERMS_OF_SERVICE
+  PRIVACY_POLICY
+  MARKETING_EMAILS
+  ANALYTICS_COOKIES
+  AI_PROCESSING
+  VOICE_RECORDING
+  DATA_SHARING
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  EXPORT
+  SHARE
+  CONSENT_GRANTED
+  CONSENT_REVOKED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth & Billing
+// ─────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  emailVerified    DateTime?
+  passwordHash     String?
+  name             String?
+  image            String?
+  stripeCustomerId String?   @unique
+  plan             UserPlan  @default(FREE)
+  role             UserRole  @default(USER)
+  locale           String    @default("es-ES")
+  encryptionKeyId  String?
+  isActive         Boolean   @default(true)
+  lastLoginAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  subscriptions  Subscription[]
+  usageMeters    UsageMeter[]
+  cases          Case[]
+  auditLogs      AuditLog[]
+  consentRecords ConsentRecord[]
+
+  @@index([plan])
+  @@index([role])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  stripeSubscriptionId String             @unique
+  stripePriceId        String
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  canceledAt           DateTime?
+  trialStart           DateTime?
+  trialEnd             DateTime?
+  metadata             Json?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([currentPeriodEnd])
+  @@map("subscriptions")
+}
+
+model UsageMeter {
+  id                 String   @id @default(cuid())
+  userId             String
+  periodStart        DateTime
+  periodEnd          DateTime
+  consultationsUsed  Int      @default(0)
+  consultationsLimit Int      @default(10)
+  documentsUsed      Int      @default(0)
+  documentsLimit     Int      @default(20)
+  voiceMinutesUsed   Int      @default(0)
+  voiceMinutesLimit  Int      @default(60)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, periodStart])
+  @@index([userId])
+  @@index([periodEnd])
+  @@map("usage_meters")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Expedientes (Cases)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Case {
+  id          String       @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  status      CaseStatus   @default(DRAFT)
+  priority    CasePriority @default(MEDIUM)
+  legalArea   LegalArea
+  reference   String?
+  metadata    Json?
+  closedAt    DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consultations  Consultation[]
+  documents      Document[]
+  legalDocuments LegalDocument[]
+  deadlines      Deadline[]
+  timelineEvents TimelineEvent[]
+  voiceSessions  VoiceSession[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([legalArea])
+  @@index([priority])
+  @@index([createdAt])
+  @@index([userId, status])
+  @@map("cases")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Consultas & Mensajes
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Consultation {
+  id        String             @id @default(cuid())
+  caseId    String
+  agentId   String?
+  status    ConsultationStatus @default(PENDING)
+  topic     String?
+  summary   String?
+  metadata  Json?
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  case     Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@index([caseId])
+  @@index([status])
+  @@index([agentId])
+  @@index([createdAt])
+  @@map("consultations")
+}
+
+model Message {
+  id              String      @id @default(cuid())
+  consultationId  String
+  role            MessageRole
+  content         String      @db.Text
+  metadata        Json?
+  tokenCount      Int?
+  createdAt       DateTime    @default(now())
+
+  consultation Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+
+  @@index([consultationId])
+  @@index([role])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Documentos
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Document {
+  id        String   @id @default(cuid())
+  caseId    String
+  filename  String
+  mimeType  String
+  r2Key     String   @unique
+  encrypted Boolean  @default(true)
+  size      Int
+  checksum  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  case     Case              @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  analysis DocumentAnalysis?
+
+  @@index([caseId])
+  @@index([mimeType])
+  @@index([createdAt])
+  @@map("documents")
+}
+
+model DocumentAnalysis {
+  id         String            @id @default(cuid())
+  documentId String            @unique
+  riskScore  Float             @default(0)
+  semaphore  DocumentSemaphore @default(GREEN)
+  clauses    Json?
+  summary    String?           @db.Text
+  metadata   Json?
+  analyzedAt DateTime          @default(now())
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([riskScore])
+  @@index([semaphore])
+  @@map("document_analyses")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Documentos Legales Generados
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LegalDocument {
+  id        String            @id @default(cuid())
+  caseId    String
+  type      LegalDocumentType
+  title     String
+  status    String            @default("draft")
+  metadata  Json?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  case     Case                  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  versions LegalDocumentVersion[]
+
+  @@index([caseId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("legal_documents")
+}
+
+model LegalDocumentVersion {
+  id              String   @id @default(cuid())
+  legalDocumentId String
+  version         Int
+  htmlContent     String   @db.Text
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  legalDocument LegalDocument @relation(fields: [legalDocumentId], references: [id], onDelete: Cascade)
+
+  @@unique([legalDocumentId, version])
+  @@index([legalDocumentId])
+  @@map("legal_document_versions")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Plazos & Timeline
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Deadline {
+  id          String          @id @default(cuid())
+  caseId      String
+  title       String
+  description String?
+  dueDate     DateTime
+  urgency     DeadlineUrgency @default(MEDIUM)
+  status      DeadlineStatus  @default(PENDING)
+  reminderAt  DateTime?
+  completedAt DateTime?
+  metadata    Json?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([dueDate])
+  @@index([status])
+  @@index([urgency])
+  @@map("deadlines")
+}
+
+model TimelineEvent {
+  id          String            @id @default(cuid())
+  caseId      String
+  type        TimelineEventType
+  title       String?
+  description String
+  metadata    Json?
+  occurredAt  DateTime          @default(now())
+  createdAt   DateTime          @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([type])
+  @@index([occurredAt])
+  @@map("timeline_events")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Voz (LiveKit + Twilio)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model VoiceSession {
+  id             String             @id @default(cuid())
+  caseId         String
+  livekitRoomId  String?            @unique
+  twilioCallSid  String?            @unique
+  status         VoiceSessionStatus @default(SCHEDULED)
+  duration       Int?
+  startedAt      DateTime?
+  endedAt        DateTime?
+  metadata       Json?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  case            Case             @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  transcript      VoiceTranscript?
+  postCallSummary PostCallSummary?
+
+  @@index([caseId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("voice_sessions")
+}
+
+model VoiceTranscript {
+  id             String   @id @default(cuid())
+  voiceSessionId String   @unique
+  segments       Json
+  language       String   @default("es")
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  voiceSession VoiceSession @relation(fields: [voiceSessionId], references: [id], onDelete: Cascade)
+
+  @@map("voice_transcripts")
+}
+
+model PostCallSummary {
+  id             String   @id @default(cuid())
+  voiceSessionId String   @unique
+  summary        String   @db.Text
+  actions        Json?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  voiceSession VoiceSession @relation(fields: [voiceSessionId], references: [id], onDelete: Cascade)
+
+  @@map("post_call_summaries")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Compliance & Auditoría
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  userId     String?
+  action     AuditAction
+  resource   String
+  resourceId String?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime    @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@map("audit_logs")
+}
+
+model ConsentRecord {
+  id        String      @id @default(cuid())
+  userId    String
+  type      ConsentType
+  granted   Boolean
+  ip        String?
+  userAgent String?
+  version   String?
+  metadata  Json?
+  grantedAt DateTime?
+  revokedAt DateTime?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId])
+  @@index([type])
+  @@index([granted])
+  @@map("consent_records")
+}
