@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { setAuthToken } from '@/lib/auth-storage';
-import { trpc } from '@/lib/trpc';
+import { formatTrpcError, trpc } from '@/lib/trpc';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function LoginPage() {
       setAuthToken(data.token);
       router.push('/dashboard');
     },
-    onError: (err) => setError(err.message),
+    onError: (err) => setError(formatTrpcError(err.message)),
   });
 
   const registerMutation = trpc.auth.register.useMutation({
@@ -31,7 +31,7 @@ export default function LoginPage() {
       setAuthToken(data.token);
       router.push('/onboarding');
     },
-    onError: (err) => setError(err.message),
+    onError: (err) => setError(formatTrpcError(err.message)),
   });
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -20,6 +20,7 @@
     "dev:full": "node scripts/dev-with-db.mjs",
     "preflight": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "smoke": "node scripts/smoke-runtime.mjs",
+    "test:json-safety": "node scripts/test-json-safety.mjs",
     "start": "node scripts/start-project.mjs",
     "docker:up": "docker compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.yml down",

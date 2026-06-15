@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { getAuthToken } from '@/lib/auth-storage';
-import { trpc } from '@/lib/trpc';
+import { formatTrpcError, trpc } from '@/lib/trpc';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const token = typeof window !== 'undefined' ? getAuthToken() : null;
-  const { data: user, isLoading, isError } = trpc.auth.me.useQuery(undefined, {
+  const { data: user, isLoading, isError, error } = trpc.auth.me.useQuery(undefined, {
     enabled: Boolean(token),
     retry: false,
   });
@@ -27,6 +27,19 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex min-h-screen items-center justify-center text-lex-text-muted">
         Cargando…
+      </div>
+    );
+  }
+
+  if (isError && error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+        <p className="max-w-md text-lex-risk-high" role="alert">
+          {formatTrpcError(error.message)}
+        </p>
+        <p className="text-sm text-lex-text-muted">
+          El panel requiere la API en ejecución. La landing y páginas legales siguen disponibles.
+        </p>
       </div>
     );
   }

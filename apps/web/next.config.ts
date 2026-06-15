@@ -1,8 +1,6 @@
 import path from 'node:path';
 import type { NextConfig } from 'next';
 
-const apiUrl = process.env['API_URL'] ?? 'http://localhost:4000';
-
 const isVercel = Boolean(process.env['VERCEL']);
 
 const nextConfig: NextConfig = {
@@ -13,14 +11,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@lexai/shared', 'lucide-react', 'framer-motion'],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/trpc/:path*',
-        destination: `${apiUrl}/trpc/:path*`,
-      },
-    ];
-  },
+  // tRPC proxied via app/api/trpc/[...path]/route.ts (safe JSON handling)
 };
 
 export default nextConfig;
