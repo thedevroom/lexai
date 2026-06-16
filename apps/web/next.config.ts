@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   ...(isVercel ? {} : { output: 'standalone' as const }),
   outputFileTracingRoot: path.join(import.meta.dirname, '../..'),
+  outputFileTracingIncludes: {
+    '/api/**/*': [
+      './node_modules/.prisma/client/**/*',
+      './node_modules/@prisma/client/**/*',
+    ],
+  },
   transpilePackages: ['@lexai/shared', '@lexai/design-tokens'],
   serverExternalPackages: ['@lexai/ai', '@prisma/client', 'bcryptjs', 'ioredis'],
   experimental: {
