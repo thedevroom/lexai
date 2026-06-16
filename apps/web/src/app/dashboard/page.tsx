@@ -26,18 +26,18 @@ export default function DashboardPage() {
     <main className="p-8" id="main-content">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold">
-          Bienvenido{user?.name ? `, ${user.name}` : ''}
+          Welcome{user?.name ? `, ${user.name}` : ''}
         </h1>
         <p className="mt-1 text-lex-text-secondary">
-          Plan {user?.plan ?? 'FREE'} · Su despacho digital
+          {user?.plan ?? 'FREE'} plan · Your digital law firm
         </p>
       </div>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         {[
-          { icon: MessageSquare, label: 'Consultas', value: casesData?.cases.length ?? 0 },
-          { icon: FileText, label: 'Documentos', value: '—' },
-          { icon: Clock, label: 'Plazos activos', value: deadlines.length },
+          { icon: MessageSquare, label: 'Consultations', value: casesData?.cases.length ?? 0 },
+          { icon: FileText, label: 'Documents', value: '—' },
+          { icon: Clock, label: 'Active deadlines', value: deadlines.length },
         ].map((stat) => (
           <Card key={stat.label}>
             <CardContent className="flex items-center gap-4 pt-6">
@@ -54,7 +54,7 @@ export default function DashboardPage() {
       <div className="grid gap-8 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Actividad reciente</CardTitle>
+            <CardTitle>Recent activity</CardTitle>
           </CardHeader>
           <CardContent>
             {casesData?.cases.length ? (
@@ -69,16 +69,16 @@ export default function DashboardPage() {
                         <p className="font-medium">{c.title}</p>
                         <p className="text-xs text-lex-text-muted">{c.legalArea}</p>
                       </div>
-                      <span className="text-xs text-lex-accent-gold">Abrir →</span>
+                      <span className="text-xs text-lex-accent-gold">Open →</span>
                     </Link>
                   </li>
                 ))}
               </ul>
             ) : (
               <div className="py-8 text-center">
-                <p className="text-lex-text-muted">Sin expedientes aún</p>
+                <p className="text-lex-text-muted">No cases yet</p>
                 <Button asChild className="mt-4">
-                  <Link href="/onboarding">Crear primer expediente</Link>
+                  <Link href="/onboarding">Create your first case</Link>
                 </Button>
               </div>
             )}
@@ -87,7 +87,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Próximos plazos</CardTitle>
+            <CardTitle>Upcoming deadlines</CardTitle>
           </CardHeader>
           <CardContent>
             <DeadlineTimeline deadlines={deadlines} />

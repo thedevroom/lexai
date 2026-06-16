@@ -7,7 +7,7 @@ const organization = {
   url: siteUrl,
   logo: `${siteUrl}/favicon.svg`,
   description:
-    'Despacho digital de inteligencia artificial jurídica en español con 9 áreas especializadas.',
+    'AI-powered digital law firm with 9 specialized practice areas.',
   sameAs: ['https://github.com/thedevroom/lexai'],
 };
 
@@ -21,10 +21,10 @@ const software = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'EUR',
-    description: 'Consulta básica gratuita',
+    description: 'Free basic consultation',
   },
   description:
-    'Plataforma SaaS de asesoramiento jurídico con IA: laboral, civil, penal, fiscal y más.',
+    'AI legal assistance SaaS platform: employment, civil, criminal, tax, and more.',
   url: siteUrl,
 };
 

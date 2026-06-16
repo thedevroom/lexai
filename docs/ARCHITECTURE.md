@@ -1,19 +1,20 @@
-# Arquitectura — LexAI v2
+# Architecture — LexAI v2
 
-## Visión general
+## Overview
 
-LexAI es un monorepo Turborepo que separa la experiencia de usuario (Next.js), la lógica de negocio y persistencia (Fastify + tRPC + Prisma) y el razonamiento jurídico (paquete `@lexai/ai`).
+LexAI is a Turborepo monorepo that separates the user experience (Next.js), business logic and persistence (tRPC + Prisma), and legal reasoning (`@lexai/ai` package).
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  apps/web (Next.js 15)                                      │
 │  Marketing · Dashboard · Admin · Legal · PWA                │
+│  /api/trpc — inline handler (Vercel) or proxy (split mode)  │
 └──────────────────────────┬──────────────────────────────────┘
-                           │ tRPC / REST
+                           │ tRPC
 ┌──────────────────────────▼──────────────────────────────────┐
-│  apps/api (Fastify)                                         │
-│  Auth · Cases · Consultations · Documents · Compliance      │
-│  Admin · Billing · Voice (base)                             │
+│  apps/api (Fastify — local dev / optional split deploy)       │
+│  Auth · Cases · Consultations · Documents · Compliance        │
+│  Admin · Billing · Voice (base)                               │
 └──────┬───────────────────────────────┬──────────────────────┘
        │                               │
        ▼                               ▼
@@ -25,78 +26,119 @@ LexAI es un monorepo Turborepo que separa la experiencia de usuario (Next.js), l
        ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  packages/ai — LexAIOrchestrator                            │
-│  Clasificación · Routing xAI · Fallback local · IRAC      │
+│  Classification · xAI routing · Local fallback · IRAC       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Paquetes
+## Deployment modes
+
+```mermaid
+flowchart TB
+  subgraph Local["Local development"]
+    WEB_L[Next.js :3000]
+    API_L[Fastify :4000]
+    PG_L[(Embedded Postgres)]
+    WEB_L -->|tRPC proxy| API_L
+    API_L --> PG_L
+  end
+
+  subgraph Vercel["Production — Vercel + Neon"]
+    WEB_V[Next.js serverless]
+    INLINE["/api/trpc inline handler"]
+    PG_V[(Neon Postgres)]
+    WEB_V --> INLINE
+    INLINE --> PG_V
+  end
+
+  subgraph Split["Optional — split architecture"]
+    WEB_S[Next.js on Vercel]
+    API_S[Fastify on Railway/Docker]
+    PG_S[(Cloud Postgres)]
+    WEB_S -->|proxy via API_URL| API_S
+    API_S --> PG_S
+  end
+```
+
+| Mode | Detection | `API_URL` required? |
+|------|-----------|---------------------|
+| Local | `DATABASE_URL` contains `localhost` | Yes (defaults to `:4000`) |
+| Inline (Vercel) | Cloud `DATABASE_URL` detected | **No** |
+| Split | Cloud `DATABASE_URL` + `API_URL` set | Yes |
+
+Inline mode is controlled by `useInlineTrpc()` in `apps/web/src/lib/api-config.ts`.
+
+## Packages
 
 ### `apps/web`
 
-- **App Router** con rutas públicas (landing, producto, legal) y protegidas (`AuthGuard`, `AdminGuard`)
-- **tRPC client** tipado hacia la API
-- **Design system** basado en tokens (`@lexai/design-tokens`) y componentes reutilizables
-- **Demo interactiva** de producto en landing (`#demo`)
+- **App Router** with public routes (landing, product, legal) and protected routes (`AuthGuard`, `AdminGuard`)
+- **tRPC client** typed against the shared `AppRouter`
+- **Inline tRPC handler** at `src/app/api/trpc/[...path]/route.ts` for Vercel serverless
+- **Design system** based on tokens (`@lexai/design-tokens`) and reusable components
+- **Interactive demo** on the landing page (`#demo`)
 
 ### `apps/api`
 
-- **tRPC** como capa principal de API con contexto de sesión, IP y user-agent
-- **Prisma** para modelos: usuarios, expedientes, consultas, documentos, consentimientos, auditoría
-- **Middleware** de rate limiting, anti-abuso y roles (`USER`, `ADMIN`)
-- **Servicios** desacoplados: IA de consultas, almacenamiento R2/MinIO, cifrado, colas
+- **tRPC** as the primary API layer with session, IP, and user-agent context
+- **Prisma** models: users, cases, consultations, documents, consents, audit logs
+- **Middleware** for rate limiting, abuse prevention, and roles (`USER`, `ADMIN`)
+- **Decoupled services**: consultation AI, R2/MinIO storage, encryption, job queues
+- **Fastify server** for local development and optional split production deploy
 
 ### `packages/ai`
 
-- **LexAIOrchestrator**: clasifica la consulta, elige área jurídica y modelo
-- **9 prompts** de sistema por área (`*.system.md`)
-- **xAI client** opcional con degradación a motor local (`lexai-local-fallback`)
-- Salida validada con esquema `LegalResponse` (`@lexai/shared`)
+- **LexAIOrchestrator**: classifies queries, selects legal area and model
+- **9 system prompts** per practice area (`*.system.md`)
+- **Optional xAI client** with degradation to local engine (`lexai-local-fallback`)
+- Output validated against `LegalResponse` schema (`@lexai/shared`)
 
 ### `packages/shared`
 
-- Tipos de dominio, áreas legales, disclaimers y esquemas Zod compartidos entre API, web y AI
+- Domain types, legal areas, disclaimers, and Zod schemas shared across API, web, and AI
 
-## Flujo de una consulta jurídica
+## Legal consultation flow
 
-1. El usuario envía mensaje desde el chat del dashboard
-2. `consultations` router valida sesión y crea/actualiza el hilo
-3. `consultation-ai` invoca al orquestador con contexto del expediente
-4. El orquestador clasifica complejidad y área → xAI live o fallback local
-5. La respuesta JSON (IRAC + citas + disclaimer) se persiste y se streaméa al cliente
-6. Eventos de auditoría y consentimiento quedan registrados según RGPD
+1. User sends a message from the dashboard chat
+2. `consultations` router validates the session and creates/updates the thread
+3. `consultation-ai` invokes the orchestrator with case context
+4. Orchestrator classifies complexity and area → xAI live or local fallback
+5. JSON response (IRAC + citations + disclaimer) is persisted and streamed to the client
+6. Audit events and consent records are logged per GDPR requirements
 
-## Autenticación y roles
+## Authentication & roles
 
-- **NextAuth** en web; JWT en API para llamadas directas
-- Rol `ADMIN` habilita `/admin`, gestión de usuarios y logs de auditoría
-- Seed crea admin y usuario demo en desarrollo
+- **JWT** auth via tRPC `auth` router; tokens stored client-side
+- `ADMIN` role enables `/admin`, user management, and audit log access
+- Seed creates admin and demo user in development
 
-## Infraestructura local
+## Local infrastructure
 
-| Modo | Postgres | Redis | Almacenamiento |
-|------|----------|-------|----------------|
-| Embebido | `embedded-postgres` | Memoria (fallback) | `.local-storage/` |
+| Mode | Postgres | Redis | Storage |
+|------|----------|-------|---------|
+| Embedded | `embedded-postgres` | In-memory (fallback) | `.local-storage/` |
 | Docker | `docker-compose` | Redis 7 | MinIO |
 
-Scripts de arranque en `scripts/start-project.mjs` y `scripts/dev-with-db.mjs`.
+Startup scripts: `scripts/start-project.mjs` and `scripts/dev-with-db.mjs`.
 
-## Seguridad y cumplimiento
+## Security & compliance
 
-- Cifrado **AES-256-GCM** para campos sensibles y documentos privilegiados
-- Router `compliance`: consentimientos, exportación y borrado de datos
-- Páginas legales y banner de cookies alineados con LSSI/RGPD
-- Ver [legal-compliance.md](./legal-compliance.md)
+- **AES-256-GCM** encryption for sensitive fields and privileged documents
+- `compliance` router: consent management, data export, and deletion
+- Legal pages and cookie banner aligned with LSSI/GDPR
+- See [legal-compliance.md](./legal-compliance.md)
 
 ## CI/CD
 
-- **CI** (`.github/workflows/ci.yml`): lint, typecheck, test con Postgres/Redis de servicio, build
-- **E2E** (`.github/workflows/e2e.yml`): Playwright nocturno (workflow_dispatch disponible)
+- **CI** (`.github/workflows/ci.yml`): lint, typecheck, test with service Postgres/Redis, build
+- **E2E** (`.github/workflows/e2e.yml`): nightly Playwright (`workflow_dispatch` available)
+- **Vercel build**: migrations + production bootstrap + Next.js build (see `apps/web/vercel.json`)
 
-## Decisiones técnicas
+## Technical decisions
 
-| Decisión | Motivo |
-|----------|--------|
-| tRPC end-to-end | Tipado compartido y menos boilerplate REST |
-| Monorepo pnpm | Dependencias internas (`workspace:*`) y builds cacheados con Turbo |
-| Fallback IA local | Desarrollo sin coste API y resiliencia en producción |
-| PostgreSQL embebido | Onboarding sin Docker en Windows/macOS/Linux |
+| Decision | Rationale |
+|----------|-----------|
+| tRPC end-to-end | Shared typing, less REST boilerplate |
+| Inline tRPC on Vercel | Single deploy, no separate API server, Neon serverless-friendly |
+| pnpm monorepo | Internal deps (`workspace:*`) and Turbo-cached builds |
+| Local AI fallback | Zero API cost in dev and production resilience |
+| Embedded PostgreSQL | Onboarding without Docker on Windows/macOS/Linux |

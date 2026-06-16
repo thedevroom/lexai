@@ -26,7 +26,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!token || isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center text-lex-text-muted">
-        Cargando…
+        Loading…
       </div>
     );
   }
@@ -38,7 +38,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
           {formatTrpcError(error.message)}
         </p>
         <p className="text-sm text-lex-text-muted">
-          El panel requiere la API en ejecución. La landing y páginas legales siguen disponibles.
+          The dashboard requires the API to be running. The landing page and legal pages remain available.
         </p>
       </div>
     );
@@ -62,7 +62,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   if (isLoading || user?.role !== 'ADMIN') {
     return (
       <div className="flex min-h-screen items-center justify-center text-lex-text-muted">
-        Verificando permisos…
+        Verifying permissions…
       </div>
     );
   }

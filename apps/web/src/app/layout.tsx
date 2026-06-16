@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="dark">
+    <html lang="en" className="dark">
       <body
         className={`${inter.variable} ${interTight.variable} ${playfair.variable} min-h-screen`}
       >
@@ -40,7 +40,7 @@ export default function RootLayout({
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-lex-accent-gold focus:px-4 focus:py-2 focus:text-lex-bg-primary"
         >
-          Saltar al contenido
+          Skip to content
         </a>
         <AppProviders>{children}</AppProviders>
       </body>

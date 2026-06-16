@@ -1,22 +1,22 @@
-## Descripción
+## Description
 
-<!-- Qué cambia este PR y por qué -->
+<!-- What does this PR change and why? -->
 
-## Tipo de cambio
+## Type of change
 
-- [ ] feat — nueva funcionalidad
-- [ ] fix — corrección de bug
-- [ ] docs — documentación
-- [ ] chore — mantenimiento / CI
-- [ ] refactor — sin cambio de comportamiento
+- [ ] feat — new feature
+- [ ] fix — bug fix
+- [ ] docs — documentation
+- [ ] chore — maintenance / CI
+- [ ] refactor — no behavior change
 
-## Cómo probar
+## How to test
 
 1.
 2.
 
 ## Checklist
 
-- [ ] `pnpm preflight` pasa en local
-- [ ] Sin secretos ni archivos `.env` en el diff
-- [ ] Tests añadidos o actualizados si aplica
+- [ ] `pnpm preflight` passes locally
+- [ ] No secrets or `.env` files in the diff
+- [ ] Tests added or updated where applicable

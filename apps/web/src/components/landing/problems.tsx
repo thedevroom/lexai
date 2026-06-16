@@ -6,23 +6,23 @@ import { GlassCard } from '@/components/design-system/glass-card';
 const problems = [
   {
     icon: Clock,
-    title: 'Abogado = caro y lento',
-    desc: '€150-500/hora. Cita en 2 semanas. El 78% evita ir por el coste.',
+    title: 'Lawyers = expensive and slow',
+    desc: '€150–500/hour. Appointments in 2 weeks. 78% avoid going due to cost.',
   },
   {
     icon: HelpCircle,
-    title: 'Google no basta',
-    desc: 'Información genérica que no aplica a su caso concreto.',
+    title: 'Google is not enough',
+    desc: 'Generic information that does not apply to your specific case.',
   },
   {
     icon: Landmark,
-    title: 'Justicia para pocos',
-    desc: 'PYMEs y particulares sin el mismo nivel legal que las grandes empresas.',
+    title: 'Justice for the few',
+    desc: 'SMBs and individuals lack the same legal support as large corporations.',
   },
   {
     icon: FileX,
-    title: 'Contratos incomprensibles',
-    desc: 'El 91% firma sin entender. Un análisis básico cuesta €300+.',
+    title: 'Incomprehensible contracts',
+    desc: '91% sign without understanding. A basic review costs €300+.',
   },
 ];
 
@@ -31,7 +31,7 @@ export function Problems() {
     <section className="px-6 py-24">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-12 text-center font-display text-3xl font-bold md:text-4xl">
-          El problema que resolvemos
+          The problem we solve
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {problems.map((p, i) => (

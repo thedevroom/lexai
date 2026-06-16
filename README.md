@@ -1,12 +1,12 @@
 <div align="center">
 
-![LexAI — Despacho digital de IA jurídica](.github/assets/banner.png)
+![LexAI — AI-powered legal practice platform](.github/assets/banner.png)
 
 # LexAI v2
 
-**Despacho digital de inteligencia artificial jurídica en español**
+**Premium AI legal intelligence platform for Spanish law**
 
-Consultas multi-área · Memoria de expedientes · Análisis documental · Escritos legales · RGPD nativo
+Multi-area consultations · Case memory · Document analysis · Legal drafting · GDPR-native compliance
 
 <br/>
 
@@ -17,11 +17,11 @@ Consultas multi-área · Memoria de expedientes · Análisis documental · Escri
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](tsconfig.base.json)
 [![pnpm](https://img.shields.io/badge/pnpm-10-F69220?style=flat-square&logo=pnpm&logoColor=white)](package.json)
 
-[**Demo en vivo**](https://lexai-bay.vercel.app) · [**Documentación**](./docs/ARCHITECTURE.md) · [**Despliegue**](./docs/DEPLOYMENT.md) · [**Reportar bug**](../../issues/new?template=bug_report.yml)
+[**Live demo**](https://lexai-bay.vercel.app) · [**Architecture**](./docs/ARCHITECTURE.md) · [**Deployment**](./docs/DEPLOYMENT.md) · [**Report a bug**](https://github.com/thedevroom/lexai/issues/new?template=bug_report.yml)
 
 <br/>
 
-⭐ **Si este proyecto te resulta útil, una estrella ayuda a que más desarrolladores y despachos lo descubran.**
+⭐ **If this project is useful to you, a star helps more developers and law firms discover it.**
 
 [![Star on GitHub](https://img.shields.io/github/stars/thedevroom/lexai?style=social)](https://github.com/thedevroom/lexai/stargazers)
 
@@ -29,50 +29,38 @@ Consultas multi-área · Memoria de expedientes · Análisis documental · Escri
 
 ---
 
-## Por qué LexAI
+## Why LexAI
 
-Los despachos y departamentos legales necesitan IA que **entienda el derecho español**, no un chat genérico. LexAI combina:
+Law firms and in-house legal teams need AI that **understands Spanish law** — not a generic chatbot. LexAI delivers:
 
-| Problema | Solución LexAI |
-|----------|----------------|
-| Chatbots sin marco jurídico | Metodología **IRAC** y esquema `LegalResponse` validado |
-| Riesgo RGPD / LSSI | Consentimientos, auditoría, exportación y borrado de datos |
-| Coste API impredecible | **Motor local inteligente** + xAI opcional con fallback automático |
-| Software legal anticuado | UI premium dark-first, demo interactiva, PWA-ready |
-
----
-
-## Vista previa
-
-<div align="center">
-
-![Dashboard LexAI — chat jurídico con IRAC](.github/assets/dashboard-preview.png)
-
-*Interfaz de consulta jurídica con áreas especializadas y respuestas estructuradas*
-
-</div>
+| Challenge | LexAI solution |
+|-----------|----------------|
+| Chatbots without legal structure | **IRAC** methodology and validated `LegalResponse` schema |
+| GDPR / LSSI compliance risk | Consent management, audit trails, data export & deletion |
+| Unpredictable API costs | **Smart local engine** + optional xAI with automatic fallback |
+| Outdated legal software | Premium dark-first UI, interactive demo, PWA-ready |
 
 ---
 
-## Características principales
+## Key features
 
 <table>
 <tr>
 <td width="50%">
 
-### IA jurídica
-- **9 áreas**: laboral, civil, penal, fiscal, familia, consumidor, tráfico, extranjería, mercantil
-- Orquestador con clasificación de complejidad
-- Disclaimers reforzados en penal y fiscal
-- Prompts de sistema de 2000+ tokens por área
+### Legal AI
+- **9 practice areas**: labor, civil, criminal, tax, family, consumer, traffic, immigration, commercial
+- Orchestrator with complexity classification
+- Reinforced disclaimers for criminal & tax matters
+- 2,000+ token system prompts per area
 
 </td>
 <td width="50%">
 
-### Producto listo para producción
-- Landing con **demo interactiva 60s**
-- Páginas legales (términos, privacidad, cookies, aviso legal)
-- Panel **admin** con usuarios y auditoría
+### Production-ready product
+- Landing with **60s interactive demo**
+- Legal pages (terms, privacy, cookies, legal notice)
+- **Admin** panel with users & audit logs
 - SEO: `robots.ts`, `sitemap.ts`, Open Graph
 
 </td>
@@ -80,20 +68,20 @@ Los despachos y departamentos legales necesitan IA que **entienda el derecho esp
 <tr>
 <td>
 
-### Seguridad & compliance
-- Cifrado **AES-256-GCM**
-- Router de cumplimiento RGPD
-- Rate limiting y anti-abuso
-- Audit logs de acciones sensibles
+### Security & compliance
+- **AES-256-GCM** encryption
+- GDPR compliance router
+- Rate limiting & abuse prevention
+- Audit logs for sensitive actions
 
 </td>
 <td>
 
 ### Developer experience
-- Monorepo **Turborepo + pnpm**
-- tRPC end-to-end tipado
-- CI con lint, test, build
-- PostgreSQL embebido sin Docker
+- **Turborepo + pnpm** monorepo
+- End-to-end typed tRPC
+- CI with lint, test, build
+- Embedded PostgreSQL — no Docker required
 
 </td>
 </tr>
@@ -101,33 +89,34 @@ Los despachos y departamentos legales necesitan IA que **entienda el derecho esp
 
 ---
 
-## Arquitectura
+## Architecture
 
 ```mermaid
-
 flowchart TB
-  subgraph Cliente
-    WEB[Next.js 15 · Marketing + Dashboard]
+  subgraph Client
+    WEB["Next.js 15 · Marketing + Dashboard"]
   end
-  subgraph Backend
-    API[Fastify + tRPC + Prisma]
-    AI[lexai/ai Orquestador]
+  subgraph API["API layer"]
+    TRPC["tRPC — inline on Vercel or Fastify"]
+    AI["@lexai/ai Orchestrator"]
   end
-  subgraph Datos
-    PG[(PostgreSQL 16)]
-    RD[(Redis / BullMQ)]
+  subgraph Data
+    PG[("PostgreSQL 16")]
+    RD[("Redis / BullMQ")]
   end
-  WEB -->|tRPC| API
-  API --> AI
-  API --> PG
-  API --> RD
+  WEB -->|"/api/trpc"| TRPC
+  TRPC --> AI
+  TRPC --> PG
+  TRPC --> RD
 ```
 
-Detalle completo en [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
+> **Production on Vercel:** tRPC runs inline via Next.js serverless routes when `DATABASE_URL` points to a cloud database (e.g. [Neon](https://neon.tech)). No separate API server required.
+
+Full details in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ---
 
-## Inicio rápido
+## Quick start
 
 ```bash
 git clone https://github.com/thedevroom/lexai.git
@@ -137,23 +126,23 @@ cp .env.example .env    # Windows: copy .env.example .env
 pnpm start
 ```
 
-| Servicio | URL |
-|----------|-----|
+| Service | URL |
+|---------|-----|
 | Web | http://localhost:3000 |
 | API | http://localhost:4000/health |
 
-`pnpm start` ejecuta preflight, base de datos embebida, migraciones, seed y smoke tests.
+`pnpm start` runs preflight checks, embedded database, migrations, seed, and smoke tests.
 
-### Cuentas demo (tras `pnpm db:seed`)
+### Demo accounts (after `pnpm db:seed`)
 
-| Rol | Email | Contraseña |
-|-----|-------|------------|
+| Role | Email | Password |
+|------|-------|----------|
 | Admin | `admin@lexai.es` | `AdminLexAI2026!` |
-| Usuario | `demo@lexai.es` | `DemoLexAI2026!` |
+| User | `demo@lexai.es` | `DemoLexAI2026!` |
 
 ---
 
-## Stack tecnológico
+## Tech stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-15-000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"/>
@@ -166,80 +155,80 @@ pnpm start
 
 ---
 
-## Despliegue
+## Deployment
 
-| Plataforma | Uso |
-|------------|-----|
-| [**Vercel**](https://vercel.com) | Frontend Next.js (marketing + UI) |
-| Railway / Render / Docker | API + PostgreSQL + Redis |
+| Platform | Use case |
+|----------|----------|
+| [**Vercel**](https://vercel.com) | Next.js app + **inline tRPC** + Neon Postgres |
+| Railway / Render / Docker | Standalone Fastify API (optional split architecture) |
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fthedevroom%2Flexai&project-name=lexai&root-directory=apps%2Fweb)
 
-Guía paso a paso: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+Step-by-step guide: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
 
 ---
 
-## Estructura del monorepo
+## Monorepo structure
 
 ```
 lexai/
 ├── apps/
 │   ├── web/          # Next.js — landing, dashboard, admin, legal
-│   └── api/          # Fastify + tRPC + Prisma
+│   └── api/          # Fastify + tRPC + Prisma (local dev & optional split deploy)
 ├── packages/
-│   ├── ai/           # Orquestador y agentes jurídicos
-│   ├── shared/       # Tipos, Zod, constantes legales
+│   ├── ai/           # Orchestrator & legal agents
+│   ├── shared/       # Types, Zod schemas, legal constants
 │   └── design-tokens/
 ├── docker/           # Compose + Dockerfiles
-├── docs/             # Arquitectura, despliegue, compliance
-└── scripts/          # Arranque y smoke tests
+├── docs/             # Architecture, deployment, compliance
+└── scripts/          # Startup & smoke tests
 ```
 
 ---
 
 ## Roadmap
 
-- [x] Monorepo, CI, 31 tests Vitest
-- [x] 9 áreas jurídicas + orquestador IA
-- [x] Dashboard, admin, páginas legales, cookies
-- [x] Demo interactiva en landing
-- [x] Despliegue Vercel (frontend)
-- [ ] Voz 24/7 (LiveKit + Twilio)
-- [ ] E2E Playwright ampliado
-- [ ] App móvil PWA offline
+- [x] Monorepo, CI, 31 Vitest tests
+- [x] 9 legal areas + AI orchestrator
+- [x] Dashboard, admin, legal pages, cookies
+- [x] Interactive landing demo
+- [x] Vercel deployment with inline tRPC
+- [ ] 24/7 voice (LiveKit + Twilio)
+- [ ] Extended Playwright E2E
+- [ ] Offline-capable PWA
 
 ---
 
-## Documentación
+## Documentation
 
-| Documento | Descripción |
-|-----------|-------------|
-| [Arquitectura](./docs/ARCHITECTURE.md) | Diseño del sistema |
-| [Desarrollo](./docs/DEVELOPMENT.md) | Convenciones y comandos |
-| [Despliegue](./docs/DEPLOYMENT.md) | Vercel, Docker, variables |
-| [Showcase](./docs/SHOWCASE.md) | Capturas y flujos de producto |
-| [RGPD](./docs/legal-compliance.md) | Cumplimiento legal |
-| [xAI](./docs/xai-integration.md) | Integración IA opcional |
-| [Contribuir](./CONTRIBUTING.md) | Guía para colaboradores |
-
----
-
-## Contribuir
-
-¿Ideas, bugs o mejoras? Lee [CONTRIBUTING.md](./CONTRIBUTING.md) y abre un issue o PR.
+| Document | Description |
+|----------|-------------|
+| [Architecture](./docs/ARCHITECTURE.md) | System design |
+| [Development](./docs/DEVELOPMENT.md) | Conventions & commands |
+| [Deployment](./docs/DEPLOYMENT.md) | Vercel, Neon, Docker, env vars |
+| [Showcase](./docs/SHOWCASE.md) | Product screenshots & flows |
+| [GDPR](./docs/legal-compliance.md) | Legal compliance |
+| [xAI](./docs/xai-integration.md) | Optional AI integration |
+| [Contributing](./CONTRIBUTING.md) | Contributor guide |
 
 ---
 
-## Licencia
+## Contributing
 
-Código propietario — ver [LICENSE](./LICENSE).
+Ideas, bugs, or improvements? Read [CONTRIBUTING.md](./CONTRIBUTING.md) and open an issue or PR.
+
+---
+
+## License
+
+Proprietary code — see [LICENSE](./LICENSE).
 
 ---
 
 <div align="center">
 
-**[thedevroom/lexai](https://github.com/thedevroom/lexai)** · Hecho con dedicación para la legaltech en español
+**[thedevroom/lexai](https://github.com/thedevroom/lexai)** · Built with care for Spanish legaltech
 
-⭐ **Star** · 🐛 **Issues** · 🍴 **Fork** · 📣 **Compartir**
+⭐ **Star** · 🐛 **Issues** · 🍴 **Fork** · 📣 **Share**
 
 </div>

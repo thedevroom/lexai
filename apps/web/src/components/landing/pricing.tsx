@@ -12,7 +12,7 @@ const plans = [
     name: 'Starter',
     monthly: 19,
     annual: 15,
-    features: ['10 consultas/mes', '5 análisis de documentos', '1 área jurídica'],
+    features: ['10 consultations/month', '5 document analyses', '1 legal area'],
   },
   {
     name: 'Pro',
@@ -20,11 +20,11 @@ const plans = [
     annual: 39,
     featured: true,
     features: [
-      'Consultas ilimitadas',
-      '20 análisis de documentos',
-      '9 áreas jurídicas',
-      'Generación de escritos',
-      '60 min voz/mes',
+      'Unlimited consultations',
+      '20 document analyses',
+      '9 legal areas',
+      'Legal document drafting',
+      '60 min voice/month',
     ],
   },
   {
@@ -32,11 +32,11 @@ const plans = [
     monthly: 149,
     annual: 119,
     features: [
-      'Todo en Pro',
-      'Voz ilimitada',
+      'Everything in Pro',
+      'Unlimited voice',
       'API access',
-      'Soporte prioritario',
-      'RGPD enterprise',
+      'Priority support',
+      'Enterprise GDPR',
     ],
   },
 ];
@@ -48,9 +48,9 @@ export function Pricing() {
     <section id="pricing" className="px-6 py-24" data-scroll="reveal">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
-          <h2 className="font-display text-4xl font-bold">Precios transparentes</h2>
+          <h2 className="font-display text-4xl font-bold">Transparent pricing</h2>
           <p className="mt-3 text-lex-text-secondary">
-            Sin honorarios por hora. Sin sorpresas.
+            No hourly fees. No surprises.
           </p>
 
           <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-lex-bg-secondary p-1">
@@ -62,7 +62,7 @@ export function Pricing() {
                 !annual ? 'bg-lex-accent-gold text-lex-bg-primary' : 'text-lex-text-secondary',
               )}
             >
-              Mensual
+              Monthly
             </button>
             <button
               type="button"
@@ -72,7 +72,7 @@ export function Pricing() {
                 annual ? 'bg-lex-accent-gold text-lex-bg-primary' : 'text-lex-text-secondary',
               )}
             >
-              Anual <span className="text-xs opacity-80">-20%</span>
+              Annual <span className="text-xs opacity-80">-20%</span>
             </button>
           </div>
         </div>
@@ -95,13 +95,13 @@ export function Pricing() {
             >
               {plan.featured && (
                 <span className="mb-4 inline-block rounded-full bg-lex-accent-gold px-3 py-1 text-xs font-semibold text-lex-bg-primary">
-                  Más popular
+                  Most popular
                 </span>
               )}
               <h3 className="font-display text-xl font-semibold">{plan.name}</h3>
               <p className="mt-4 font-display text-4xl font-bold">
                 €{annual ? plan.annual : plan.monthly}
-                <span className="text-base font-normal text-lex-text-muted">/mes</span>
+                <span className="text-base font-normal text-lex-text-muted">/mo</span>
               </p>
               <ul className="mt-6 space-y-3">
                 {plan.features.map((f) => (
@@ -116,7 +116,7 @@ export function Pricing() {
                 variant={plan.featured ? 'default' : 'secondary'}
                 className="mt-8 w-full"
               >
-                <Link href="/login">Empezar</Link>
+                <Link href="/login">Get started</Link>
               </Button>
             </motion.div>
           ))}

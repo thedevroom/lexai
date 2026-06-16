@@ -18,7 +18,7 @@ export function Hero() {
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-lex-accent-gold/20 bg-lex-accent-gold/5 px-4 py-1.5 text-sm text-lex-accent-gold"
         >
           <Scale size={14} aria-hidden />
-          Despacho digital premium · España & LatAm
+          Premium digital law firm · Spain & LatAm
         </motion.div>
 
         <motion.h1
@@ -27,10 +27,10 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="font-display text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl"
         >
-          Justicia de{' '}
-          <span className="font-serif italic text-gradient-gold">élite</span>
+          <span className="font-serif italic text-gradient-gold">Elite</span>
+          {' '}justice
           <br />
-          accesible para todos
+          accessible for everyone
         </motion.h1>
 
         <motion.p
@@ -39,8 +39,8 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.25 }}
           className="mx-auto mt-8 max-w-2xl text-lg text-lex-text-secondary md:text-xl"
         >
-          9 abogados IA especializados con el rigor de un senior partner.
-          Análisis, redacción y asesoramiento 24/7 — sin honorarios por hora.
+          9 specialized AI lawyers with the rigor of a senior partner.
+          Analysis, drafting, and advice 24/7 — no hourly fees.
         </motion.p>
 
         <motion.div
@@ -51,12 +51,12 @@ export function Hero() {
         >
           <Button asChild size="lg">
             <Link href="/login">
-              Chat gratis
+              Free chat
               <ArrowRight size={18} aria-hidden />
             </Link>
           </Button>
           <Button asChild variant="secondary" size="lg">
-            <Link href="#demo">Ver demo 60s</Link>
+            <Link href="#demo">Watch 60s demo</Link>
           </Button>
         </motion.div>
 
@@ -67,10 +67,10 @@ export function Hero() {
           className="mx-auto mt-20 grid max-w-3xl grid-cols-2 gap-4 md:grid-cols-4"
         >
           {[
-            { n: '€0', l: 'por consulta básica' },
-            { n: '<30s', l: 'análisis documento' },
-            { n: '24/7', l: 'disponibilidad' },
-            { n: '9', l: 'áreas jurídicas' },
+            { n: '€0', l: 'per basic consultation' },
+            { n: '<30s', l: 'document analysis' },
+            { n: '24/7', l: 'availability' },
+            { n: '9', l: 'legal practice areas' },
           ].map((stat) => (
             <div
               key={stat.l}

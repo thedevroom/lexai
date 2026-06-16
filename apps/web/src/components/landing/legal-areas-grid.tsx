@@ -11,13 +11,13 @@ export function LegalAreasGrid() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 text-center">
           <p className="text-sm font-medium uppercase tracking-widest text-lex-accent-gold">
-            Especialistas
+            Specialists
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            9 senior partners digitales
+            9 digital senior partners
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lex-text-secondary">
-            Cada área con legislación española actualizada, metodología IRAC y jurisprudencia en tiempo real.
+            Each area with up-to-date Spanish legislation, IRAC methodology, and real-time case law.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function LegalAreasGrid() {
                 ))}
               </div>
               {area.strictDisclaimer && (
-                <p className="mt-3 text-[10px] text-lex-risk-medium">Disclaimer reforzado</p>
+                <p className="mt-3 text-[10px] text-lex-risk-medium">Enhanced disclaimer</p>
               )}
             </GlassCard>
           ))}
@@ -60,7 +60,7 @@ export function LegalAreasGrid() {
             href="/login"
             className="text-sm font-medium text-lex-accent-gold hover:underline"
           >
-            Probar consulta gratuita →
+            Try a free consultation →
           </Link>
         </div>
       </div>

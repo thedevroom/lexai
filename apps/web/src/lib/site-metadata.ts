@@ -4,20 +4,20 @@ const siteUrl = process.env['WEB_URL'] ?? 'https://lexai-bay.vercel.app';
 
 export const siteConfig = {
   name: 'LexAI',
-  title: 'LexAI — Despacho Jurídico de Inteligencia Artificial',
+  title: 'LexAI — AI-Powered Legal Law Firm',
   description:
-    'Despacho digital premium con 9 abogados IA especializados. Análisis jurídico, redacción de escritos y asesoramiento 24/7 en legislación española.',
+    'Premium digital law firm with 9 specialized AI lawyers. Legal analysis, document drafting, and advice 24/7 under Spanish law.',
   url: siteUrl,
   ogImage: `${siteUrl}/og-image.png`,
   twitterHandle: '@thedevroom',
   keywords: [
     'legaltech',
-    'inteligencia artificial jurídica',
-    'abogado IA',
-    'derecho español',
-    'asesoramiento legal',
-    'RGPD',
-    'despacho digital',
+    'legal artificial intelligence',
+    'AI lawyer',
+    'Spanish law',
+    'legal advice',
+    'GDPR',
+    'digital law firm',
   ],
 };
 
@@ -36,7 +36,7 @@ export const rootMetadata: Metadata = {
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
-    locale: 'es_ES',
+    locale: 'en_US',
     url: siteConfig.url,
     siteName: siteConfig.name,
     title: siteConfig.title,
@@ -46,7 +46,7 @@ export const rootMetadata: Metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'LexAI — Despacho jurídico de inteligencia artificial',
+        alt: 'LexAI — AI-powered legal law firm',
       },
     ],
   },

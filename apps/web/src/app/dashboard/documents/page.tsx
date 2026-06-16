@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 
 const DEMO_DOCS = [
-  { id: '1', filename: 'contrato_arrendamiento.pdf', riskScore: 6.2, semaphore: 'YELLOW' as const, summary: 'Cláusula de fianza potencialmente abusiva. Revisar art. 36 LAU.' },
-  { id: '2', filename: 'email_despido.pdf', riskScore: 8.1, semaphore: 'RED' as const, summary: 'Indicios de despido improcedente. Plazo SMAC 20 días hábiles.' },
-  { id: '3', filename: 'politica_privacidad.pdf', riskScore: 2.0, semaphore: 'GREEN' as const, summary: 'Cumple RGPD en términos generales. Mejorar cláusula de transferencias.' },
+  { id: '1', filename: 'contrato_arrendamiento.pdf', riskScore: 6.2, semaphore: 'YELLOW' as const, summary: 'Potentially abusive deposit clause. Review art. 36 LAU.' },
+  { id: '2', filename: 'email_despido.pdf', riskScore: 8.1, semaphore: 'RED' as const, summary: 'Signs of unfair dismissal. SMAC deadline: 20 business days.' },
+  { id: '3', filename: 'politica_privacidad.pdf', riskScore: 2.0, semaphore: 'GREEN' as const, summary: 'Generally GDPR compliant. Improve data transfer clause.' },
 ];
 
 export default function DocumentsPage() {
@@ -28,14 +28,14 @@ export default function DocumentsPage() {
     filename: d.filename,
     riskScore: d.analysis?.riskScore ?? 5,
     semaphore: (d.analysis?.semaphore ?? 'YELLOW') as 'GREEN' | 'YELLOW' | 'RED',
-    summary: d.analysis?.summary ?? 'Análisis pendiente',
+    summary: d.analysis?.summary ?? 'Analysis pending',
   })) : DEMO_DOCS;
 
   return (
     <main className="p-8">
-      <h1 className="mb-2 font-display text-3xl font-bold">Análisis de documentos</h1>
+      <h1 className="mb-2 font-display text-3xl font-bold">Document analysis</h1>
       <p className="mb-8 text-lex-text-secondary">
-        Revise el riesgo legal de sus contratos y escritos con semáforo visual.
+        Review the legal risk of your contracts and legal documents with a visual traffic-light indicator.
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,7 +66,7 @@ export default function DocumentsPage() {
                 {selected?.filename}
               </Dialog.Title>
               <Dialog.Close asChild>
-                <button type="button" aria-label="Cerrar">
+                <button type="button" aria-label="Close">
                   <X size={20} />
                 </button>
               </Dialog.Close>
@@ -76,12 +76,12 @@ export default function DocumentsPage() {
                 <RiskSemaphore semaphore={selected.semaphore} score={selected.riskScore} size="lg" />
                 <p className="text-sm leading-relaxed text-lex-text-secondary">{selected.summary}</p>
                 <div className="rounded-xl border border-lex-risk-medium/20 bg-lex-risk-medium/5 p-4">
-                  <p className="text-xs font-semibold text-lex-risk-medium">Cláusula destacada</p>
+                  <p className="text-xs font-semibold text-lex-risk-medium">Highlighted clause</p>
                   <p className="mt-2 text-sm italic text-lex-text-secondary">
-                    &quot;El arrendatario renuncia expresamente a cualquier acción judicial…&quot;
+                    &quot;The tenant expressly waives any right to judicial action…&quot;
                   </p>
                 </div>
-                <Button variant="outline" disabled>Exportar informe PDF</Button>
+                <Button variant="outline" disabled>Export PDF report</Button>
               </div>
             )}
           </Dialog.Content>

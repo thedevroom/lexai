@@ -2,19 +2,19 @@ import type { LegalAreaId } from './legal-areas.js';
 import { getLegalAreaById } from './legal-areas.js';
 
 const BASE_DISCLAIMER =
-  'La información proporcionada por LexAI tiene carácter de orientación jurídica general ' +
-  'y no constituye asesoramiento legal vinculante ni relación abogado-cliente. ' +
-  'Para decisiones con consecuencias legales significativas, consulte con un abogado colegiado.';
+  'The information provided by LexAI is general legal guidance only ' +
+  'and does not constitute binding legal advice or an attorney-client relationship. ' +
+  'For decisions with significant legal consequences, consult a licensed attorney.';
 
 const STRICT_DISCLAIMERS: Partial<Record<LegalAreaId, string>> = {
   penal:
     BASE_DISCLAIMER +
-    ' En materia penal, LexAI no sustituye la defensa técnica de un abogado. ' +
-    'No confíe decisiones sobre su libertad o derechos fundamentales únicamente a esta herramienta.',
+    ' In criminal matters, LexAI does not replace the technical defense provided by an attorney. ' +
+    'Do not rely solely on this tool for decisions affecting your liberty or fundamental rights.',
   fiscal:
     BASE_DISCLAIMER +
-    ' En materia fiscal, LexAI no proporciona asesoramiento fiscal vinculante ni sustituye ' +
-    'a un asesor fiscal colegiado. Las obligaciones tributarias requieren revisión profesional.',
+    ' In tax matters, LexAI does not provide binding tax advice and does not replace ' +
+    'a licensed tax advisor. Tax obligations require professional review.',
 };
 
 export function getDisclaimerForArea(areaId: LegalAreaId): string {

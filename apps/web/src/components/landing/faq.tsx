@@ -6,20 +6,20 @@ import { BASE_DISCLAIMER } from '@lexai/shared';
 
 const faqs = [
   {
-    q: '¿LexAI sustituye a un abogado?',
-    a: 'No. LexAI proporciona orientación jurídica general con rigor profesional, pero no establece relación abogado-cliente vinculante. Para decisiones críticas, consulte un abogado colegiado.',
+    q: 'Does LexAI replace a lawyer?',
+    a: 'No. LexAI provides general legal guidance with professional rigor, but it does not establish a binding attorney–client relationship. For critical decisions, consult a licensed attorney.',
   },
   {
-    q: '¿Qué legislación cubre?',
-    a: 'Legislación española como base, con adaptaciones para LatAm. 9 áreas: laboral, civil, penal, familia, fiscal, tráfico, consumidor, mercantil y extranjería.',
+    q: 'What legislation does it cover?',
+    a: 'Spanish law as the foundation, with adaptations for Latin America. 9 areas: employment, civil, criminal, family, tax, traffic, consumer, commercial, and immigration.',
   },
   {
-    q: '¿Mis datos están seguros?',
-    a: 'Sí. Cifrado AES-256-GCM, cumplimiento RGPD, consentimiento granular y expedientes cifrados por usuario.',
+    q: 'Is my data secure?',
+    a: 'Yes. AES-256-GCM encryption, GDPR compliance, granular consent, and user-encrypted case files.',
   },
   {
-    q: '¿Puedo generar escritos legales?',
-    a: 'Sí, en planes Pro y Enterprise. Burofaxes, cartas de despido, recursos, contratos y más — listos para revisión y firma.',
+    q: 'Can I generate legal documents?',
+    a: 'Yes, on Pro and Enterprise plans. Certified letters, dismissal notices, appeals, contracts, and more — ready for review and signature.',
   },
 ];
 
@@ -29,7 +29,7 @@ export function FAQ() {
   return (
     <section id="faq" className="px-6 py-24">
       <div className="mx-auto max-w-3xl">
-        <h2 className="mb-12 text-center font-display text-3xl font-bold">Preguntas frecuentes</h2>
+        <h2 className="mb-12 text-center font-display text-3xl font-bold">Frequently asked questions</h2>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <div
@@ -59,7 +59,7 @@ export function FAQ() {
 
         <div className="mt-12 rounded-xl border border-lex-risk-medium/20 bg-lex-risk-medium/5 p-6">
           <p className="text-xs leading-relaxed text-lex-text-muted">
-            <strong className="text-lex-risk-medium">Aviso legal:</strong> {BASE_DISCLAIMER}
+            <strong className="text-lex-risk-medium">Legal notice:</strong> {BASE_DISCLAIMER}
           </p>
         </div>
       </div>

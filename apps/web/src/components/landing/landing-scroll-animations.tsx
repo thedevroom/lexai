@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * GSAP ScrollTrigger — animaciones sutiles con propósito narrativo:
+ * GSAP ScrollTrigger — subtle animations with narrative purpose:
  *
- * 1. Problems: cada tarjeta entra en secuencia (frustración → solución visual)
- * 2. Legal areas: revelado escalonado por fila (catálogo de especialistas)
- * 3. Comparison + Pricing: fade-up al entrar en viewport (decisión de compra)
+ * 1. Problems: each card enters in sequence (frustration → visual solution)
+ * 2. Legal areas: staggered reveal by row (specialist catalog)
+ * 3. Comparison + Pricing: fade-up on viewport entry (purchase decision)
  *
- * Respeta prefers-reduced-motion. No altera el estilo visual existente.
+ * Respects prefers-reduced-motion. Does not alter existing visual styling.
  */
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';

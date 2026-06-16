@@ -1,44 +1,44 @@
 name: Bug report
-description: Reportar un error en LexAI
+description: Report a bug in LexAI
 title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Gracias por reportar. Incluye pasos claros para reproducir el problema.
+        Thanks for reporting. Please include clear steps to reproduce the issue.
   - type: textarea
     id: description
     attributes:
-      label: Descripción
-      description: ¿Qué ocurrió?
+      label: Description
+      description: What happened?
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Pasos para reproducir
+      label: Steps to reproduce
       placeholder: |
         1. pnpm start
-        2. Ir a /dashboard
+        2. Go to /dashboard
         3. ...
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: Versión / commit
+      label: Version / commit
       placeholder: main @ abc1234
   - type: dropdown
     id: area
     attributes:
-      label: Área afectada
+      label: Affected area
       options:
         - Web (Next.js)
         - API (Fastify/tRPC)
-        - IA / Orquestador
-        - Base de datos
-        - Despliegue
-        - Otro
+        - AI / Orchestrator
+        - Database
+        - Deployment
+        - Other
     validations:
       required: true

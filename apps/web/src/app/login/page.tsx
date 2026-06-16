@@ -58,18 +58,18 @@ export default function LoginPage() {
             <Scale className="text-lex-accent-gold" size={28} aria-hidden />
             <span className="font-display text-2xl font-bold">LexAI</span>
           </Link>
-          <CardTitle>{isRegister ? 'Crear cuenta' : 'Iniciar sesión'}</CardTitle>
+          <CardTitle>{isRegister ? 'Create account' : 'Sign in'}</CardTitle>
           <CardDescription>
             {isRegister
-              ? 'Empiece su consulta jurídica gratuita'
-              : 'Acceda a su despacho digital'}
+              ? 'Start your free legal consultation'
+              : 'Access your digital law firm'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <Input
-                placeholder="Nombre"
+                placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
@@ -85,7 +85,7 @@ export default function LoginPage() {
             />
             <Input
               type="password"
-              placeholder="Contraseña (mín. 8 caracteres)"
+              placeholder="Password (min. 8 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -98,7 +98,7 @@ export default function LoginPage() {
               </p>
             )}
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Procesando…' : isRegister ? 'Registrarse' : 'Entrar'}
+              {isLoading ? 'Processing…' : isRegister ? 'Sign up' : 'Sign in'}
             </Button>
           </form>
           <button
@@ -106,7 +106,7 @@ export default function LoginPage() {
             onClick={() => setIsRegister(!isRegister)}
             className="mt-4 w-full text-center text-sm text-lex-text-secondary hover:text-lex-accent-gold"
           >
-            {isRegister ? '¿Ya tiene cuenta? Inicie sesión' : '¿Nuevo? Cree su cuenta gratis'}
+            {isRegister ? 'Already have an account? Sign in' : 'New here? Create your free account'}
           </button>
         </CardContent>
       </Card>

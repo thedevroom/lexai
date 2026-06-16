@@ -26,23 +26,23 @@ export function mapPlainTextApiError(raw: string): string {
     lower.startsWith('the deploy') ||
     lower.includes('deployment has failed')
   ) {
-    return 'El servicio de API no está disponible temporalmente. Inténtelo de nuevo en unos minutos.';
+    return 'The API service is temporarily unavailable. Please try again in a few minutes.';
   }
   if (lower.includes('bad gateway') || lower.includes('502')) {
-    return 'No se pudo conectar con el servidor. Compruebe su conexión o inténtelo más tarde.';
+    return 'Could not connect to the server. Check your connection or try again later.';
   }
   if (lower.includes('service unavailable') || lower.includes('503')) {
-    return 'El servicio está en mantenimiento. Vuelva a intentarlo pronto.';
+    return 'The service is under maintenance. Please try again soon.';
   }
   if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
-    return 'Respuesta inesperada del servidor. El backend puede no estar configurado.';
+    return 'Unexpected server response. The backend may not be configured.';
   }
   if (trimmed.length === 0) {
-    return 'El servidor devolvió una respuesta vacía.';
+    return 'The server returned an empty response.';
   }
 
   const preview = trimmed.slice(0, 120).replace(/\s+/g, ' ');
-  return `Respuesta no válida del servidor: ${preview}${trimmed.length > 120 ? '…' : ''}`;
+  return `Invalid server response: ${preview}${trimmed.length > 120 ? '…' : ''}`;
 }
 
 export function safeJsonParse<T>(text: string): SafeParseResponse<T> {

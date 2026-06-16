@@ -1,39 +1,40 @@
-# Guía de desarrollo — LexAI v2
+# Development Guide — LexAI v2
 
-## Entorno local
+## Local environment
 
 ```bash
 pnpm install
 copy .env.example .env   # Windows
-pnpm start               # arranque completo con validaciones
+pnpm start               # full startup with validations
 ```
 
-Alternativa paso a paso: ver [README](../README.md).
+For a step-by-step walkthrough, see the [README](../README.md).
 
-## Convenciones de código
+## Code conventions
 
 ### TypeScript
 
-- `strict: true`, evitar `any`
-- Validación de entradas externas con **Zod**
-- Preferir `import type { ... }` para tipos
+- `strict: true` — avoid `any`
+- Validate external inputs with **Zod**
+- Prefer `import type { ... }` for type-only imports
 
-### Estructura de archivos
+### File structure
 
-| Área | Ubicación |
-|------|-----------|
-| Modelos Prisma | `apps/api/prisma/schema.prisma` |
-| Routers tRPC | `apps/api/src/trpc/routers/` |
-| Servicios API | `apps/api/src/services/` |
-| Orquestador IA | `packages/ai/src/orchestrator/` |
-| Prompts jurídicos | `packages/ai/src/prompts/*.system.md` |
-| Componentes UI | `apps/web/src/components/` |
-| Páginas App Router | `apps/web/src/app/` |
-| Tokens de diseño | `packages/design-tokens/src/tokens.css` |
+| Area | Location |
+|------|----------|
+| Prisma models | `apps/api/prisma/schema.prisma` |
+| tRPC routers | `apps/api/src/trpc/routers/` |
+| API services | `apps/api/src/services/` |
+| AI orchestrator | `packages/ai/src/orchestrator/` |
+| Legal prompts | `packages/ai/src/prompts/*.system.md` |
+| UI components | `apps/web/src/components/` |
+| App Router pages | `apps/web/src/app/` |
+| Design tokens | `packages/design-tokens/src/tokens.css` |
+| Inline tRPC route | `apps/web/src/app/api/trpc/[...path]/route.ts` |
 
 ### Commits
 
-Usamos [Conventional Commits](https://www.conventionalcommits.org/):
+We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 feat(web): add cookie consent banner
@@ -42,77 +43,86 @@ docs: update architecture diagram
 chore(ci): align pnpm version with packageManager
 ```
 
-### IA jurídica
+### Legal AI
 
-- Salidas conformes al esquema `LegalResponse`
-- Metodología **IRAC** obligatoria en respuestas estructuradas
-- Disclaimers reforzados en áreas **PENAL** y **FISCAL**
-- Confianza &lt; 0.7 → disclaimer ampliado y recomendación de abogado humano
+- Outputs must conform to the `LegalResponse` schema
+- **IRAC** methodology is mandatory for structured responses
+- Reinforced disclaimers in **CRIMINAL** and **TAX** areas
+- Confidence &lt; 0.7 → expanded disclaimer and recommendation to consult a human lawyer
 
-### Diseño
+### Design
 
-- Tema oscuro: fondo `#0A0A0A`, acento oro `#C5A46E`
-- Tipografías: Inter Tight, Inter, Playfair Display
-- Animaciones con Framer Motion; respetar `prefers-reduced-motion`
-- Objetivo **WCAG 2.2 AA**
+- Dark theme: background `#0A0A0A`, gold accent `#C5A46E`
+- Typography: Inter Tight, Inter, Playfair Display
+- Animations with Framer Motion; respect `prefers-reduced-motion`
+- Target **WCAG 2.2 AA** compliance
 
 ## Testing
 
 ```bash
-pnpm test          # Vitest en todos los paquetes
+pnpm test          # Vitest across all packages
 pnpm preflight     # lint + typecheck + test + build
-pnpm smoke         # humo runtime (API + web levantados)
+pnpm smoke         # runtime smoke tests (API + web running)
 ```
 
-- Tests unitarios/integración con **Vitest**
-- En CI no se llama a la API real de xAI (mocks / motor local)
-- E2E con Playwright en `apps/web` (workflow nocturno)
+- Unit and integration tests with **Vitest**
+- CI does not call the live xAI API (mocks / local engine)
+- E2E with Playwright in `apps/web` (nightly workflow)
 
-## Base de datos
+## Database
 
 ```bash
 pnpm db:generate          # Prisma client
-pnpm db:migrate             # nueva migración en dev
-pnpm db:migrate:deploy      # aplicar en CI/prod
-pnpm db:seed                # datos demo + admin
-pnpm db:studio              # Prisma Studio
+pnpm db:migrate           # create new migration in dev
+pnpm db:migrate:deploy    # apply in CI/prod
+pnpm db:seed              # demo data + admin user
+pnpm db:studio            # Prisma Studio
 ```
 
-PostgreSQL embebido: `pnpm db:local` (datos en `apps/api/.embedded-db/`, ignorado por git).
+Embedded PostgreSQL: `pnpm db:local` (data stored in `apps/api/.embedded-db/`, gitignored).
 
-## Variables y secretos
+## Environment & secrets
 
-- Nunca commitear `.env` ni claves reales
-- Plantilla en `.env.example`
-- Para activar IA en vivo: `XAI_API_KEY` en `.env`
-- Generar secretos: `openssl rand -base64 32`
+- Never commit `.env` or real API keys
+- Template available in `.env.example`
+- To enable live AI: set `XAI_API_KEY` in `.env`
+- Generate secrets: `openssl rand -base64 32`
 
-## Calidad antes de PR
+### Local vs production tRPC
+
+| Environment | tRPC mode | Trigger |
+|-------------|-----------|---------|
+| Local dev | Fastify on `:4000` or inline | `DATABASE_URL` with `localhost` → separate API |
+| Vercel + Neon | Inline at `/api/trpc` | Cloud `DATABASE_URL` → no `API_URL` needed |
+
+## Quality before PR
 
 ```bash
 pnpm preflight
 pnpm format:check
 ```
 
-## Roadmap interno
+## Internal roadmap
 
-| Módulo | Estado |
+| Module | Status |
 |--------|--------|
-| Schema + migraciones + seed | Completo |
-| Backend tRPC (auth, cases, docs, compliance) | Completo |
-| Orquestador + 9 áreas jurídicas | Completo |
-| Frontend marketing + dashboard | Completo |
-| Panel admin + auditoría | Completo |
-| Seguridad RGPD + cifrado | Completo |
-| Docker + CI | Completo |
-| Voz (LiveKit + Twilio) | En progreso |
-| E2E Playwright ampliado | Pendiente |
+| Schema + migrations + seed | Complete |
+| Backend tRPC (auth, cases, docs, compliance) | Complete |
+| Orchestrator + 9 legal areas | Complete |
+| Marketing frontend + dashboard | Complete |
+| Admin panel + audit logs | Complete |
+| GDPR security + encryption | Complete |
+| Docker + CI | Complete |
+| Inline tRPC on Vercel | Complete |
+| Voice (LiveKit + Twilio) | In progress |
+| Extended Playwright E2E | Pending |
 
-## Bloqueos habituales
+## Common blockers
 
-| Problema | Solución |
-|----------|----------|
-| Puerto 4000/3000 ocupado | `pnpm start` libera puertos; o cerrar procesos manualmente |
-| Error Prisma sin Postgres | Usar `pnpm db:local` o `pnpm docker:up` |
-| Redis no disponible | La API usa fallback en memoria (aviso en logs) |
-| Sin créditos xAI | Motor local responde automáticamente |
+| Problem | Solution |
+|---------|----------|
+| Port 4000/3000 in use | `pnpm start` frees ports; or kill processes manually |
+| Prisma error without Postgres | Use `pnpm db:local` or `pnpm docker:up` |
+| Redis unavailable | API falls back to in-memory (warning in logs) |
+| No xAI credits | Local engine responds automatically |
+| Vercel 503 on tRPC | Ensure `DATABASE_URL` is set to a cloud Postgres URL |

@@ -7,23 +7,23 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const productLinks = [
-  { href: '/producto', label: 'Producto' },
-  { href: '/#areas', label: 'Áreas jurídicas' },
-  { href: '/#demo', label: 'Demo 60s' },
-  { href: '/seguridad', label: 'Seguridad' },
+  { href: '/producto', label: 'Product' },
+  { href: '/#areas', label: 'Legal areas' },
+  { href: '/#demo', label: '60s demo' },
+  { href: '/seguridad', label: 'Security' },
 ];
 
 const companyLinks = [
-  { href: '/empresa', label: 'Sobre nosotros' },
-  { href: '/contacto', label: 'Contacto' },
+  { href: '/empresa', label: 'About us' },
+  { href: '/contacto', label: 'Contact' },
   { href: '/#faq', label: 'FAQ' },
 ];
 
 const legalLinks = [
-  { href: '/legal/terms', label: 'Términos' },
-  { href: '/legal/privacy', label: 'Privacidad' },
+  { href: '/legal/terms', label: 'Terms' },
+  { href: '/legal/privacy', label: 'Privacy' },
   { href: '/legal/cookies', label: 'Cookies' },
-  { href: '/legal/aviso-legal', label: 'Aviso legal' },
+  { href: '/legal/aviso-legal', label: 'Legal notice' },
 ];
 
 function NavDropdown({
@@ -71,27 +71,27 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-lex-bg-primary/85 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6" aria-label="Principal">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6" aria-label="Main">
         <Link href="/" className="flex items-center gap-2">
           <Scale className="text-lex-accent-gold" size={22} aria-hidden />
           <span className="font-display text-lg font-semibold">LexAI</span>
         </Link>
 
         <div className="hidden items-center gap-8 lg:flex">
-          <NavDropdown label="Producto" links={productLinks} />
+          <NavDropdown label="Product" links={productLinks} />
           <Link href="/#pricing" className="text-sm text-lex-text-secondary hover:text-lex-text-primary">
-            Precios
+            Pricing
           </Link>
-          <NavDropdown label="Empresa" links={companyLinks} />
+          <NavDropdown label="Company" links={companyLinks} />
           <NavDropdown label="Legal" links={legalLinks} />
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
           <Button asChild variant="ghost" size="sm">
-            <Link href="/login">Iniciar sesión</Link>
+            <Link href="/login">Sign in</Link>
           </Button>
           <Button asChild size="sm">
-            <Link href="/login">Empezar gratis</Link>
+            <Link href="/login">Get started free</Link>
           </Button>
         </div>
 
@@ -99,7 +99,7 @@ export function Navbar() {
           type="button"
           className="lg:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -108,7 +108,7 @@ export function Navbar() {
       {mobileOpen && (
         <div className="border-t border-white/[0.06] bg-lex-bg-elevated px-6 py-4 lg:hidden">
           <div className="space-y-4">
-            {[...productLinks, { href: '/#pricing', label: 'Precios' }, ...companyLinks, ...legalLinks].map(
+            {[...productLinks, { href: '/#pricing', label: 'Pricing' }, ...companyLinks, ...legalLinks].map(
               (link) => (
                 <Link
                   key={link.href}
@@ -121,7 +121,7 @@ export function Navbar() {
               ),
             )}
             <Button asChild className="w-full">
-              <Link href="/login">Empezar gratis</Link>
+              <Link href="/login">Get started free</Link>
             </Button>
           </div>
         </div>

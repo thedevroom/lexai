@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { clearAuthToken } from '@/lib/auth-storage';
 import { trpc } from '@/lib/trpc';
 
+const DELETE_CONFIRMATION = 'DELETE MY ACCOUNT';
+
 export default function SettingsPage() {
   const router = useRouter();
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
@@ -27,9 +29,9 @@ export default function SettingsPage() {
       link.download = `lexai-export-${new Date().toISOString().slice(0, 10)}.json`;
       link.click();
       URL.revokeObjectURL(url);
-      setExportStatus('Exportación completada');
+      setExportStatus('Export completed');
     },
-    onError: () => setExportStatus('Error al exportar datos'),
+    onError: () => setExportStatus('Failed to export data'),
   });
 
   const deleteAccount = trpc.compliance.deleteAccount.useMutation({
@@ -43,11 +45,11 @@ export default function SettingsPage() {
 
   return (
     <main className="p-8">
-      <h1 className="mb-8 font-display text-3xl font-bold">Ajustes</h1>
+      <h1 className="mb-8 font-display text-3xl font-bold">Settings</h1>
       <div className="max-w-xl space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Perfil</CardTitle>
+            <CardTitle>Profile</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <p>
@@ -57,7 +59,7 @@ export default function SettingsPage() {
               <span className="text-lex-text-muted">Plan:</span> {user?.plan}
             </p>
             <p>
-              <span className="text-lex-text-muted">Idioma:</span> {user?.locale}
+              <span className="text-lex-text-muted">Language:</span> {user?.locale}
             </p>
           </CardContent>
         </Card>
@@ -66,26 +68,26 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield size={18} aria-hidden />
-              Privacidad y RGPD
+              Privacy & GDPR
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
-              <p className="text-lex-text-muted">Consentimientos activos</p>
+              <p className="text-lex-text-muted">Active consents</p>
               <p className="mt-1">
                 {grantedConsents.length > 0
                   ? grantedConsents.join(', ')
-                  : 'Sin consentimientos registrados'}
+                  : 'No consents recorded'}
               </p>
             </div>
 
             {retentionPolicy && (
               <div>
-                <p className="text-lex-text-muted">Política de retención (v{retentionPolicy.version})</p>
+                <p className="text-lex-text-muted">Retention policy (v{retentionPolicy.version})</p>
                 <ul className="mt-2 space-y-1 text-xs text-lex-text-secondary">
                   {retentionPolicy.rules.map((rule) => (
                     <li key={rule.dataType}>
-                      {rule.dataType}: {rule.retentionDays} días — {rule.description}
+                      {rule.dataType}: {rule.retentionDays} days — {rule.description}
                     </li>
                   ))}
                 </ul>
@@ -100,7 +102,7 @@ export default function SettingsPage() {
                 disabled={exportData.isPending}
               >
                 <Download size={16} aria-hidden />
-                {exportData.isPending ? 'Exportando…' : 'Exportar mis datos (Art. 20)'}
+                {exportData.isPending ? 'Exporting…' : 'Export my data (Art. 20)'}
               </Button>
               {exportStatus && (
                 <span className="self-center text-xs text-lex-text-muted">{exportStatus}</span>
@@ -113,17 +115,17 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lex-risk-high">
               <Trash2 size={18} aria-hidden />
-              Zona de peligro
+              Danger zone
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <p className="text-lex-text-secondary">
-              Eliminar su cuenta borrará en cascada todos sus expedientes, consultas, documentos
-              cifrados y registros asociados (RGPD Art. 17 — derecho al olvido). Esta acción es
+              Deleting your account will permanently remove all your cases, consultations, encrypted
+              documents, and associated records (GDPR Art. 17 — right to erasure). This action is
               irreversible.
             </p>
             <Input
-              placeholder='Escriba "ELIMINAR MI CUENTA" para confirmar'
+              placeholder={`Type "${DELETE_CONFIRMATION}" to confirm`}
               value={deleteConfirmation}
               onChange={(e) => setDeleteConfirmation(e.target.value)}
             />
@@ -131,23 +133,23 @@ export default function SettingsPage() {
               variant="destructive"
               size="sm"
               disabled={
-                deleteConfirmation !== 'ELIMINAR MI CUENTA' || deleteAccount.isPending
+                deleteConfirmation !== DELETE_CONFIRMATION || deleteAccount.isPending
               }
               onClick={() =>
-                deleteAccount.mutate({ confirmation: 'ELIMINAR MI CUENTA' })
+                deleteAccount.mutate({ confirmation: DELETE_CONFIRMATION })
               }
             >
-              {deleteAccount.isPending ? 'Eliminando…' : 'Eliminar cuenta permanentemente'}
+              {deleteAccount.isPending ? 'Deleting…' : 'Delete account permanently'}
             </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Facturación</CardTitle>
+            <CardTitle>Billing</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-lex-text-muted">Portal de cliente Stripe — próximamente</p>
+            <p className="text-sm text-lex-text-muted">Stripe customer portal — coming soon</p>
           </CardContent>
         </Card>
       </div>

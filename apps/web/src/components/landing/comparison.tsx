@@ -3,11 +3,11 @@
 import { GlassCard } from '@/components/design-system/glass-card';
 
 const rows = [
-  { label: 'Coste consulta', lexai: 'Desde €0', trad: '€150-500/hora' },
-  { label: 'Tiempo de respuesta', lexai: '< 30 segundos', trad: '2-14 días' },
-  { label: 'Disponibilidad', lexai: '24/7/365', trad: 'Horario oficina' },
-  { label: 'Análisis documentos', lexai: 'Incluido', trad: '€300+ por contrato' },
-  { label: 'Especialistas', lexai: '9 áreas simultáneas', trad: '1 especialidad' },
+  { label: 'Consultation cost', lexai: 'From €0', trad: '€150–500/hour' },
+  { label: 'Response time', lexai: '< 30 seconds', trad: '2–14 days' },
+  { label: 'Availability', lexai: '24/7/365', trad: 'Office hours' },
+  { label: 'Document analysis', lexai: 'Included', trad: '€300+ per contract' },
+  { label: 'Specialists', lexai: '9 areas at once', trad: '1 specialty' },
 ];
 
 export function Comparison() {
@@ -15,7 +15,7 @@ export function Comparison() {
     <section className="px-6 py-24" data-scroll="reveal">
       <div className="mx-auto max-w-4xl">
         <h2 className="mb-12 text-center font-display text-3xl font-bold">
-          LexAI vs abogado tradicional
+          LexAI vs. traditional lawyer
         </h2>
         <GlassCard className="overflow-hidden p-0">
           <table className="w-full text-sm">
@@ -26,7 +26,7 @@ export function Comparison() {
                   LexAI
                 </th>
                 <th className="p-4 text-center font-medium text-lex-text-muted" scope="col">
-                  Tradicional
+                  Traditional
                 </th>
               </tr>
             </thead>

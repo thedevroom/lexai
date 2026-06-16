@@ -72,7 +72,7 @@ export function createTrpcClient() {
 /** User-facing message from tRPC / network errors. */
 export function formatTrpcError(message: string): string {
   if (message.includes('not valid JSON') || message.includes('Unexpected token')) {
-    return 'El servidor devolvió una respuesta inesperada. La API puede no estar disponible.';
+    return 'The server returned an unexpected response. The API may be unavailable.';
   }
   return message;
 }

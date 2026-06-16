@@ -13,7 +13,7 @@ describe('safeJsonParse', () => {
     const result = safeJsonParse(raw);
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.message).toContain('API no está disponible');
+      expect(result.message).toContain('API service is temporarily unavailable');
     }
   });
 
@@ -25,6 +25,6 @@ describe('safeJsonParse', () => {
 
 describe('mapPlainTextApiError', () => {
   it('maps deployment errors', () => {
-    expect(mapPlainTextApiError('The deploy failed')).toContain('API no está disponible');
+    expect(mapPlainTextApiError('The deploy failed')).toContain('API service is temporarily unavailable');
   });
 });

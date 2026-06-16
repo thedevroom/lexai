@@ -16,7 +16,7 @@ export default function ChatPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center text-lex-text-muted">
-        Cargando expediente…
+        Loading case…
       </div>
     );
   }
@@ -24,7 +24,7 @@ export default function ChatPage() {
   if (!caseData) {
     return (
       <div className="flex h-screen items-center justify-center text-lex-risk-high">
-        Expediente no encontrado
+        Case not found
       </div>
     );
   }

@@ -1,14 +1,14 @@
-# Contribuir a LexAI
+# Contributing to LexAI
 
-Gracias por tu interés en el proyecto. Esta guía resume el flujo de trabajo para colaborar de forma ordenada.
+Thank you for your interest in the project. This guide summarizes the workflow for contributing in an organized way.
 
-## Requisitos previos
+## Prerequisites
 
 - Node.js ≥ 22
 - pnpm ≥ 9
 - Git
 
-## Configuración
+## Setup
 
 ```bash
 git clone https://github.com/thedevroom/lexai.git
@@ -18,46 +18,48 @@ copy .env.example .env
 pnpm start
 ```
 
-## Flujo de trabajo
+## Workflow
 
-1. Crea una rama desde `main`:
+1. Create a branch from `main`:
    ```bash
-   git checkout -b feat/descripcion-corta
+   git checkout -b feat/short-description
    ```
-2. Implementa los cambios con tests cuando aplique
-3. Ejecuta `pnpm preflight` antes de abrir PR
-4. Abre un Pull Request con descripción clara: qué, por qué, cómo probar
+2. Implement changes with tests where applicable
+3. Run `pnpm preflight` before opening a PR
+4. Open a Pull Request with a clear description: what, why, and how to test
 
-## Estilo de commits
+## Commit style
 
 [Conventional Commits](https://www.conventionalcommits.org/):
 
-- `feat(scope):` nueva funcionalidad
-- `fix(scope):` corrección de bug
-- `docs:` documentación
-- `chore:` mantenimiento, dependencias
+- `feat(scope):` new feature
+- `fix(scope):` bug fix
+- `docs:` documentation
+- `chore:` maintenance, dependencies
 - `test:` tests
 - `ci:` pipelines
 
-Ejemplo: `feat(web): add admin audit log table`
+Example: `feat(web): add admin audit log table`
 
-## Estándares de código
+## Code standards
 
-- TypeScript estricto, sin `any` innecesarios
-- Validar entradas con Zod
-- No incluir secretos ni archivos `.env`
-- Respetar tokens de diseño y accesibilidad WCAG 2.2 AA
-- Respuestas IA deben cumplir `LegalResponse` e IRAC
+- Strict TypeScript — avoid unnecessary `any`
+- Validate inputs with Zod
+- Do not include secrets or `.env` files
+- Respect design tokens and WCAG 2.2 AA accessibility
+- AI responses must conform to `LegalResponse` and IRAC methodology
 
-## Reportar issues
+## Reporting issues
 
-Incluye:
+Include:
 
-- Pasos para reproducir
-- Comportamiento esperado vs actual
-- Versión de Node/pnpm y SO
-- Logs relevantes (sin datos personales ni API keys)
+- Steps to reproduce
+- Expected vs actual behavior
+- Node/pnpm version and OS
+- Relevant logs (no personal data or API keys)
 
-## Seguridad
+Use the [bug report template](https://github.com/thedevroom/lexai/issues/new?template=bug_report.yml) or [feature request template](https://github.com/thedevroom/lexai/issues/new?template=feature_request.yml).
 
-Si encuentras una vulnerabilidad, no abras un issue público. Contacta a **buildwithme1@proton.me**.
+## Security
+
+If you discover a vulnerability, do **not** open a public issue. Contact **buildwithme1@proton.me**.

@@ -2,23 +2,23 @@ import type { Metadata } from 'next';
 import { MarketingPage } from '@/components/marketing/marketing-page';
 
 export const metadata: Metadata = {
-  title: 'Seguridad',
-  description: 'Prácticas de seguridad y cumplimiento de LexAI.',
+  title: 'Security',
+  description: 'LexAI security practices and compliance.',
 };
 
 const items = [
-  { title: 'Cifrado', body: 'TLS 1.3 en tránsito. Documentos con AES-256-GCM y envelope encryption por usuario.' },
-  { title: 'Autenticación', body: 'Contraseñas bcrypt (12 rounds). JWT firmados con rotación de secretos.' },
-  { title: 'Infraestructura', body: 'Datos en UE. Backups cifrados. Health checks y rate limiting anti-abuso.' },
-  { title: 'Auditoría', body: 'Registro inmutable de acciones sensibles con retención de 7 años.' },
-  { title: 'IA responsable', body: 'Disclaimers obligatorios. Modo mock sin enviar datos a terceros en desarrollo.' },
+  { title: 'Encryption', body: 'TLS 1.3 in transit. Documents protected with AES-256-GCM and per-user envelope encryption.' },
+  { title: 'Authentication', body: 'bcrypt passwords (12 rounds). JWTs signed with secret rotation.' },
+  { title: 'Infrastructure', body: 'Data hosted in the EU. Encrypted backups. Health checks and anti-abuse rate limiting.' },
+  { title: 'Audit', body: 'Immutable log of sensitive actions with 7-year retention.' },
+  { title: 'Responsible AI', body: 'Mandatory disclaimers. Mock mode avoids sending data to third parties in development.' },
 ];
 
 export default function SeguridadPage() {
   return (
     <MarketingPage
-      title="Seguridad y confianza"
-      subtitle="Arquitectura diseñada para datos jurídicos sensibles y cumplimiento normativo."
+      title="Security and trust"
+      subtitle="Architecture designed for sensitive legal data and regulatory compliance."
     >
       <ul className="space-y-6">
         {items.map((item) => (

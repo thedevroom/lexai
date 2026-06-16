@@ -17,17 +17,17 @@ interface DemoStep {
 }
 
 const STEPS: DemoStep[] = [
-  { at: 0, scene: 'home', label: 'Bienvenida' },
-  { at: 3000, scene: 'home', cursor: { x: 72, y: 38 }, click: true, label: 'Iniciar consulta' },
-  { at: 5000, scene: 'login', label: 'Registro rápido' },
+  { at: 0, scene: 'home', label: 'Welcome' },
+  { at: 3000, scene: 'home', cursor: { x: 72, y: 38 }, click: true, label: 'Start consultation' },
+  { at: 5000, scene: 'login', label: 'Quick sign-up' },
   { at: 9000, scene: 'login', cursor: { x: 50, y: 55 }, click: true },
-  { at: 12000, scene: 'area', label: 'Selección de área' },
+  { at: 12000, scene: 'area', label: 'Select practice area' },
   { at: 15000, scene: 'area', cursor: { x: 28, y: 42 }, click: true },
-  { at: 18000, scene: 'chat', label: 'Consulta laboral' },
+  { at: 18000, scene: 'chat', label: 'Employment consultation' },
   { at: 22000, scene: 'chat', cursor: { x: 85, y: 78 }, click: true },
-  { at: 28000, scene: 'result', label: 'Análisis IA' },
-  { at: 45000, scene: 'result', label: 'Plazos y acciones' },
-  { at: 55000, scene: 'home', label: 'Listo para empezar' },
+  { at: 28000, scene: 'result', label: 'AI analysis' },
+  { at: 45000, scene: 'result', label: 'Deadlines and next steps' },
+  { at: 55000, scene: 'home', label: 'Ready to get started' },
 ];
 
 function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
@@ -35,9 +35,9 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
     return (
       <div className="flex h-full flex-col items-center justify-center p-8 text-center">
         <p className="font-display text-2xl font-bold">LexAI</p>
-        <p className="mt-2 text-sm text-lex-text-muted">Despacho jurídico IA</p>
+        <p className="mt-2 text-sm text-lex-text-muted">AI-powered law firm</p>
         <div className="mt-8 rounded-lg bg-lex-accent-gold/20 px-6 py-2 text-sm text-lex-accent-gold">
-          Chat gratis →
+          Free chat →
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
   if (scene === 'login') {
     return (
       <div className="flex h-full flex-col justify-center px-10">
-        <p className="font-semibold">Crear cuenta</p>
+        <p className="font-semibold">Create account</p>
         <div className="mt-4 space-y-3">
           <div className="h-9 rounded-lg border border-white/10 bg-lex-bg-primary/60 px-3 text-xs leading-9 text-lex-text-muted">
             maria@empresa.es
@@ -54,7 +54,7 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
             ••••••••
           </div>
           <div className="h-9 rounded-lg bg-lex-accent-gold text-center text-xs font-medium leading-9 text-lex-bg-primary">
-            Registrarse
+            Sign up
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
   if (scene === 'area') {
     return (
       <div className="grid h-full grid-cols-3 gap-3 p-6">
-        {['Laboral', 'Civil', 'Penal', 'Familia', 'Fiscal', 'Tráfico'].map((a, i) => (
+        {['Employment', 'Civil', 'Criminal', 'Family', 'Tax', 'Traffic'].map((a, i) => (
           <div
             key={a}
             className={cn(
@@ -82,10 +82,10 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
       <div className="flex h-full flex-col p-4">
         <div className="flex-1 space-y-3 overflow-hidden">
           <div className="ml-auto max-w-[80%] rounded-xl rounded-tr-sm bg-lex-accent-gold/20 p-3 text-xs">
-            Me han despedido sin carta ni indemnización tras 8 años. ¿Qué puedo hacer?
+            I was dismissed without notice or severance after 8 years. What can I do?
           </div>
           <div className="max-w-[85%] rounded-xl rounded-tl-sm border border-white/10 bg-lex-bg-elevated p-3 text-xs text-lex-text-secondary">
-            Analizando su caso laboral…
+            Analyzing your employment case…
           </div>
         </div>
         <div className="mt-3 flex gap-2">
@@ -97,14 +97,14 @@ function SceneContent({ scene }: { scene: DemoStep['scene'] }) {
   }
   return (
     <div className="space-y-3 overflow-auto p-5 text-xs">
-      <p className="font-semibold text-lex-accent-gold">Diagnóstico — Despido improcedente</p>
+      <p className="font-semibold text-lex-accent-gold">Assessment — Unfair dismissal</p>
       <p className="text-lex-text-secondary">
-        Plazo SMAC: <strong className="text-lex-risk-medium">12 días</strong> · Riesgo: medio
+        SMAC deadline: <strong className="text-lex-risk-medium">12 days</strong> · Risk: medium
       </p>
       <ul className="list-inside list-disc space-y-1 text-lex-text-muted">
-        <li>Solicitar carta de despido por burofax</li>
-        <li>Papeleta de conciliación</li>
-        <li>Indemnización 33 días/año</li>
+        <li>Request dismissal letter via certified mail</li>
+        <li>File conciliation request</li>
+        <li>Severance: 33 days per year of service</li>
       </ul>
     </div>
   );
@@ -116,7 +116,7 @@ export function ProductDemo() {
   const [scene, setScene] = useState<DemoStep['scene']>('home');
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
   const [clicking, setClicking] = useState(false);
-  const [label, setLabel] = useState('Demo 60 segundos');
+  const [label, setLabel] = useState('60-second demo');
   const startRef = useRef<number>(Date.now());
   const stepIndexRef = useRef(0);
 
@@ -157,7 +157,7 @@ export function ProductDemo() {
     setElapsed(0);
     setScene('home');
     setCursor(null);
-    setLabel('Demo 60 segundos');
+    setLabel('60-second demo');
     setPlaying(true);
     applyStep(STEPS[0]!);
   };
@@ -169,12 +169,12 @@ export function ProductDemo() {
     <section id="demo" className="scroll-mt-24 px-6 py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
-          <p className="text-sm font-medium uppercase tracking-widest text-lex-accent-gold">Demo interactiva</p>
+          <p className="text-sm font-medium uppercase tracking-widest text-lex-accent-gold">Interactive demo</p>
           <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl">
-            Vea LexAI en acción
+            See LexAI in action
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lex-text-secondary">
-            Recorrido guiado de 60 segundos: registro, selección de área, consulta y análisis jurídico con IA.
+            A guided 60-second walkthrough: sign-up, practice area selection, consultation, and AI legal analysis.
           </p>
         </div>
 
@@ -236,11 +236,11 @@ export function ProductDemo() {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Button size="sm" variant="secondary" onClick={() => setPlaying((p) => !p)}>
               {playing ? <Pause size={16} /> : <Play size={16} />}
-              {playing ? 'Pausar' : 'Continuar'}
+              {playing ? 'Pause' : 'Resume'}
             </Button>
             <Button size="sm" variant="outline" onClick={restart}>
               <RotateCcw size={16} />
-              Reiniciar demo
+              Restart demo
             </Button>
           </div>
         </div>
