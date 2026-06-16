@@ -2,7 +2,7 @@
   "name": "lexai",
   "version": "0.1.0",
   "private": true,
-  "description": "LexAI v2 — Despacho digital premium de inteligencia artificial jurídica",
+  "description": "LexAI v2 — Premium AI-powered legal intelligence platform for Spanish law",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -14,6 +14,7 @@
     "db:generate": "pnpm --filter @lexai/api exec prisma generate",
     "db:migrate": "pnpm --filter @lexai/api exec prisma migrate dev",
     "db:migrate:deploy": "pnpm --filter @lexai/api exec prisma migrate deploy",
+    "db:bootstrap:prod": "pnpm --filter @lexai/api exec tsx scripts/bootstrap-prod.ts",
     "db:seed": "pnpm --filter @lexai/api exec prisma db seed",
     "db:studio": "pnpm --filter @lexai/api exec prisma studio",
     "db:local": "node apps/api/scripts/start-embedded-db.mjs",

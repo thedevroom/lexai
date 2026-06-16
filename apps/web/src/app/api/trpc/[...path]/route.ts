@@ -1,7 +1,10 @@
+import { appRouter } from '@lexai/api/trpc';
+import { createFetchContext } from '@lexai/api/trpc/context';
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerApiUrl, isApiConfigured } from '@/lib/api-config';
-import { buildTrpcBatchError, buildTrpcErrorFromRawBody } from '@/lib/trpc-errors';
+import { getServerApiUrl, useInlineTrpc } from '@/lib/api-config';
 import { looksLikeJsonResponse, safeJsonParse } from '@/lib/safe-json';
+import { buildTrpcBatchError, buildTrpcErrorFromRawBody } from '@/lib/trpc-errors';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -9,16 +12,6 @@ export const dynamic = 'force-dynamic';
 const TIMEOUT_MS = 20_000;
 
 async function proxyTrpc(request: NextRequest, segments: string[]): Promise<NextResponse> {
-  if (!isApiConfigured()) {
-    return new NextResponse(
-      buildTrpcBatchError(
-        'La API no está configurada en este entorno. Configure API_URL en Vercel.',
-        503,
-      ),
-      { status: 503, headers: { 'Content-Type': 'application/json' } },
-    );
-  }
-
   const path = segments.join('/');
   const apiUrl = getServerApiUrl();
   const target = `${apiUrl}/trpc/${path}${request.nextUrl.search}`;
@@ -53,30 +46,56 @@ async function proxyTrpc(request: NextRequest, segments: string[]): Promise<Next
       }
     }
 
-    if (process.env['NODE_ENV'] === 'development') {
-      console.error('[tRPC proxy] Non-JSON upstream response:', text.slice(0, 300));
-    }
-
     const errorBody = buildTrpcErrorFromRawBody(text, upstream.status >= 400 ? upstream.status : 502);
     return new NextResponse(errorBody, {
       status: upstream.status >= 400 ? upstream.status : 502,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
-    const message =
-      error instanceof Error && error.name === 'TimeoutError'
-        ? 'La API tardó demasiado en responder.'
-        : 'No se pudo conectar con la API. Compruebe que el backend esté en ejecución.';
+  } catch {
+    return new NextResponse(
+      buildTrpcBatchError('Could not connect to the API. Ensure the backend is running.', 503),
+      { status: 503, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+}
 
-    if (process.env['NODE_ENV'] === 'development') {
-      console.error('[tRPC proxy] Fetch failed:', error);
-    }
+function handleInlineTrpc(request: NextRequest) {
+  const options = {
+    endpoint: '/api/trpc',
+    req: request,
+    router: appRouter,
+    createContext: createFetchContext,
+  };
 
-    return new NextResponse(buildTrpcBatchError(message, 503), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
+  if (process.env['NODE_ENV'] === 'development') {
+    return fetchRequestHandler({
+      ...options,
+      onError({ path, error }) {
+        console.error(`[tRPC] ${path}:`, error.message);
+      },
     });
   }
+
+  return fetchRequestHandler(options);
+}
+
+async function dispatch(request: NextRequest, segments: string[]) {
+  if (useInlineTrpc()) {
+    return handleInlineTrpc(request);
+  }
+
+  const apiUrl = getServerApiUrl();
+  if (!apiUrl || apiUrl.includes('localhost')) {
+    return new NextResponse(
+      buildTrpcBatchError(
+        'Database is not configured. Connect Neon Postgres in Vercel or set API_URL.',
+        503,
+      ),
+      { status: 503, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  return proxyTrpc(request, segments);
 }
 
 export async function GET(
@@ -84,7 +103,7 @@ export async function GET(
   context: { params: Promise<{ path: string[] }> },
 ) {
   const { path } = await context.params;
-  return proxyTrpc(request, path);
+  return dispatch(request, path);
 }
 
 export async function POST(
@@ -92,5 +111,5 @@ export async function POST(
   context: { params: Promise<{ path: string[] }> },
 ) {
   const { path } = await context.params;
-  return proxyTrpc(request, path);
+  return dispatch(request, path);
 }

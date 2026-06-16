@@ -31,15 +31,15 @@ export const authRouter = createRouter({
   register: publicRateLimitedProcedure
     .input(
       z.object({
-        email: z.string().email('Email inválido'),
-        password: z.string().min(8, 'Mínimo 8 caracteres'),
+        email: z.string().email('Invalid email'),
+        password: z.string().min(8, 'Minimum 8 characters'),
         name: z.string().min(2).max(100).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const existing = await ctx.prisma.user.findUnique({ where: { email: input.email } });
       if (existing) {
-        throwConflict('El email ya está registrado');
+        throwConflict('Email is already registered');
       }
 
       const passwordHash = await hashPassword(input.password);

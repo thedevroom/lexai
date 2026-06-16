@@ -11,7 +11,8 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"],
-      "@lexai/api/trpc": ["../api/src/trpc/router.ts"]
+      "@lexai/api/trpc": ["../api/src/trpc/router.ts"],
+      "@lexai/api/trpc/context": ["../api/src/trpc/context.ts"]
     },
     "allowJs": true,
     "incremental": true

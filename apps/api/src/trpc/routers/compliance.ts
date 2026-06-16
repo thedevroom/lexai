@@ -155,7 +155,7 @@ export const complianceRouter = createRouter({
   deleteAccount: sensitiveProcedure
     .input(
       z.object({
-        confirmation: z.literal('ELIMINAR MI CUENTA'),
+        confirmation: z.literal('DELETE MY ACCOUNT'),
       }),
     )
     .mutation(async ({ ctx }) => {

@@ -12,16 +12,16 @@ export const ErrorCodes = {
 
 export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];
 
-export function throwUnauthorized(message = 'No autenticado'): never {
+export function throwUnauthorized(message = 'Not authenticated'): never {
   throw new TRPCError({ code: 'UNAUTHORIZED', message });
 }
 
-export function throwForbidden(message = 'Acceso denegado'): never {
+export function throwForbidden(message = 'Access denied'): never {
   throw new TRPCError({ code: 'FORBIDDEN', message });
 }
 
 export function throwNotFound(resource: string): never {
-  throw new TRPCError({ code: 'NOT_FOUND', message: `${resource} no encontrado` });
+  throw new TRPCError({ code: 'NOT_FOUND', message: `${resource} not found` });
 }
 
 export function throwBadRequest(message: string): never {
@@ -35,6 +35,6 @@ export function throwConflict(message: string): never {
 export function throwRateLimited(retryAfterSeconds: number): never {
   throw new TRPCError({
     code: 'TOO_MANY_REQUESTS',
-    message: `Demasiadas solicitudes. Reintente en ${String(retryAfterSeconds)}s`,
+    message: `Too many requests. Retry in ${String(retryAfterSeconds)}s`,
   });
 }

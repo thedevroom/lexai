@@ -17,6 +17,10 @@
     "./trpc": {
       "types": "./src/trpc/router.ts",
       "import": "./dist/trpc/router.js"
+    },
+    "./trpc/context": {
+      "types": "./src/trpc/context.ts",
+      "import": "./dist/trpc/context.js"
     }
   },
   "dependencies": {

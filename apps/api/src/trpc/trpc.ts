@@ -63,7 +63,7 @@ export const protectedProcedure = t.procedure
   .use(standardRateLimit)
   .use(({ ctx, next }) => {
     if (!ctx.user) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No autenticado' });
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
     }
     return next({ ctx: { ...ctx, user: ctx.user } });
   });
@@ -74,7 +74,7 @@ export const sensitiveProcedure = t.procedure
   .use(sensitiveRateLimit)
   .use(({ ctx, next }) => {
     if (!ctx.user) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No autenticado' });
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
     }
     return next({ ctx: { ...ctx, user: ctx.user } });
   });
@@ -88,10 +88,10 @@ export const adminProcedure = t.procedure
   .use(sensitiveRateLimit)
   .use(({ ctx, next }) => {
     if (!ctx.user) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No autenticado' });
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
     }
     if (ctx.user.role !== 'ADMIN') {
-      throw new TRPCError({ code: 'FORBIDDEN', message: 'Acceso de administrador requerido' });
+      throw new TRPCError({ code: 'FORBIDDEN', message: 'Administrator access required' });
     }
     return next({ ctx: { ...ctx, user: ctx.user } });
   });

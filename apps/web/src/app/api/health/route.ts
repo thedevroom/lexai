@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerApiUrl, isApiConfigured } from '@/lib/api-config';
+import { getServerApiUrl, isApiConfigured, useInlineTrpc } from '@/lib/api-config';
 import { safeJsonParse } from '@/lib/safe-json';
 
 export const runtime = 'nodejs';
@@ -10,7 +10,15 @@ export async function GET() {
     status: 'ok' as const,
     service: 'lexai-web',
     apiConfigured: isApiConfigured(),
+    mode: useInlineTrpc() ? ('inline' as const) : ('proxy' as const),
   };
+
+  if (useInlineTrpc()) {
+    return NextResponse.json({
+      ...web,
+      api: { status: 'ok' as const, mode: 'inline-trpc' },
+    });
+  }
 
   if (!isApiConfigured()) {
     return NextResponse.json({
