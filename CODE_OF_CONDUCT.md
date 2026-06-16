@@ -1,23 +1,23 @@
-# Código de conducta
+# Code of Conduct
 
-## Compromiso
+## Commitment
 
-Este proyecto promueve un entorno abierto, respetuoso e inclusivo para colaboradores y usuarios.
+This project promotes an open, respectful, and inclusive environment for contributors and users.
 
-## Estándares
+## Standards
 
-Comportamientos esperados:
+Expected behavior:
 
-- Lenguaje respetuoso y constructivo
-- Aceptar críticas técnicas con apertura
-- Enfocarse en lo mejor para la comunidad y el producto
+* Use respectful and constructive language
+* Accept technical feedback with an open mind
+* Focus on what is best for the community and the product
 
-Comportamientos inaceptables:
+Unacceptable behavior:
 
-- Acoso, discriminación o lenguaje ofensivo
-- Publicar información privada de terceros
-- Conducta no profesional en issues o PRs
+* Harassment, discrimination, or offensive language
+* Sharing third parties' private information
+* Unprofessional conduct in issues or pull requests (PRs)
 
-## Aplicación
+## Enforcement
 
-Reportes a **buildwithme1@proton.me**. Las quejas se revisarán de forma confidencial.
+Reports can be sent to **[buildwithme1@proton.me](mailto:buildwithme1@proton.me)**. Complaints will be reviewed confidentially.
