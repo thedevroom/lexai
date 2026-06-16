@@ -1,7 +1,5 @@
 <div align="center">
 
-![LexAI — AI-powered legal practice platform]
-
 # LexAI v2
 
 **Premium AI legal intelligence platform for Spanish law**
