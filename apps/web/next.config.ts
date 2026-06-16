@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin';
 import type { NextConfig } from 'next';
 
 const isVercel = Boolean(process.env['VERCEL']);
@@ -18,7 +19,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@lexai/shared', 'lucide-react', 'framer-motion'],
   },
-  // tRPC proxied via app/api/trpc/[...path]/route.ts (safe JSON handling)
+  webpack(config, { isServer }) {
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()];
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
