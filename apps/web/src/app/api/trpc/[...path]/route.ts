@@ -1,5 +1,4 @@
-import { appRouter } from '@lexai/api/trpc';
-import { createFetchContext } from '@lexai/api/trpc/context';
+import { appRouter, createFetchContext } from '@/server/lexai-trpc';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerApiUrl, useInlineTrpc } from '@/lib/api-config';
