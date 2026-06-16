@@ -1,6 +1,6 @@
 <div align="center">
 
-![LexAI — AI-powered legal practice platform](.github/assets/banner.png)
+![LexAI — AI-powered legal practice platform]
 
 # LexAI v2
 
