@@ -8,18 +8,12 @@ Multi-area consultations · Case memory · Document analysis · Legal drafting �
 
 <br/>
 
-[![CI](https://github.com/thedevroom/lexai/actions/workflows/ci.yml/badge.svg)](https://github.com/thedevroom/lexai/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-Proprietary-gold?style=flat-square)](LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D22-339933?style=flat-square&logo=node.js&logoColor=white)](package.json)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js&logoColor=white)](apps/web)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](tsconfig.base.json)
-[![pnpm](https://img.shields.io/badge/pnpm-10-F69220?style=flat-square&logo=pnpm&logoColor=white)](package.json)
 
 [**Live demo**](https://lexai-bay.vercel.app) · [**Architecture**](./docs/ARCHITECTURE.md) · [**Deployment**](./docs/DEPLOYMENT.md) · [**Report a bug**](https://github.com/thedevroom/lexai/issues/new?template=bug_report.yml)
 
 <br/>
 
-⭐ **If this project is useful to you, a star helps more developers and law firms discover it.**
+
 
 [![Star on GitHub](https://img.shields.io/github/stars/thedevroom/lexai?style=social)](https://github.com/thedevroom/lexai/stargazers)
 
